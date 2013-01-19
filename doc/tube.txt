@@ -1,0 +1,100 @@
+*viterm.txt*    
+*viterm*
+
+                                  Viterm
+                 Smooth interaction between MacVim and iTerm
+                                   v0.1
+
+                                     ~
+                              Reference Manual
+
+==============================================================================
+CONTENTS                                                     *viterm-contents*
+
+        1. Overview ..............................|viterm-overview|
+        2. Requirements ..........................|viterm-requirements|
+        3. Commands ..............................|viterm-commands|
+        4. Commands ..............................|viterm-commands|
+        5. Settings ..............................|viterm-settings|
+        6. Changelog .............................|viterm-changelog| 
+        7. Credits ...............................|viterm-credits|
+        8. License ...............................|viterm-license|
+
+
+==============================================================================
+1. Overview                                                  *viterm-overview*
+
+
+
+==============================================================================
+2. Requirements                                          *viterm-requirements*
+
+
+
+3. Aliasing                                                  *viterm-aliasing*
+==============================================================================
+
+
+
+==============================================================================
+4. Commands                                                  *viterm-commands*
+
+Viterm                                                                *Viterm* 
+
+
+
+==============================================================================
+5. Settings                                                  *viterm-settings*
+
+
+g:viterm_run_command_background              *g:viterm_run_command_background*
+
+Setting this to 1 force Viterm to mantain the focus on the MacVim window. If 
+you set this to 0, whenever you execute a command the focus switch to iTerm. 
+You can toggle this setting with the VitermToggleRunBackground command.
+
+default: 1
+
+
+g:viterm_always_clear_screen                    *g:viterm_always_clear_screen*
+
+Setting this to 0 force iTerm to clear its screen whenever a command is
+executed. You can toggle this setting with the VitermToggleClearScreen 
+command.
+
+default: 0
+
+
+g:viterm_aliases                                            *g:viterm_aliases* 
+
+With this you can set your own aliases for commands. This is a dictionary where you can set youar alias as follow:
+
+    let g:viterm_aliases = {
+        \'ls': 'ls -l',
+        \'py%': 'python %'
+    \}
+
+Just be sure to have unique aliases.
+
+default: {}
+
+
+==============================================================================
+6. Changelog                                                *viterm-changelog*
+
+* v0.1: first release
+
+
+==============================================================================
+7. Credits                                                    *viterm-credits*
+
+Developed by Giacomo Comitti
+
+Git repository: https://github.com/gcmt/viterm.vim
+
+
+==============================================================================
+8. License                                                    *viterm-license*
+
+MIT (see LICENSE.txt)
+
