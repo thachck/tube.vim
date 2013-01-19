@@ -14,6 +14,25 @@ separate iTerm or Terminal window.
 * Vim compiled with python 2.x+
 
 
+## Installation
+
+Extract the content of the folder into the `.vim` folder or use your favourite 
+package manager Pathogen or Vundle.
+
+To complete the installation you need to set the following variable in 
+your `.vimrc` file:
+
+```
+let g:tube_terminal = 'iterm'      " if you use iTerm.app 
+```              
+
+or 
+
+```
+let g:tube_terminal = 'terminal'   " if you use Terminal.app 
+```
+
+
 ## Commands
 
 

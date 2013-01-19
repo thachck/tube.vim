@@ -12,13 +12,14 @@
 CONTENTS                                                       *tube-contents*
 
         1. Overview ..............................|tube-overview|
-        2. Requirements ..........................|tube-requirements|
-        3. Commands ..............................|tube-commands|
+        2. Installation ..........................|tube-installation|
+        3. Requirements ..........................|tube-requirements|
         4. Commands ..............................|tube-commands|
-        5. Settings ..............................|tube-settings|
-        6. Changelog .............................|tube-changelog| 
-        7. Credits ...............................|tube-credits|
-        8. License ...............................|tube-license|
+        5. Commands ..............................|tube-commands|
+        6. Settings ..............................|tube-settings|
+        7. Changelog .............................|tube-changelog| 
+        8. Credits ...............................|tube-credits|
+        9. License ...............................|tube-license|
 
 
 ==============================================================================
@@ -30,9 +31,24 @@ separate iTerm or Terminal window.
 
     eg. :Tube cd .. & python run_tests.py
 
+==============================================================================
+2. Installation                                            *tube-installation*
+
+Extract the content of the folder into the `.vim` folder or use your favourite 
+package manager Pathogen or Vundle.
+
+To complete the installation you need to set the following variable in 
+your .vimrc file:
+
+    let g:tube_terminal = 'iterm'      " if you use iTerm.app 
+
+or 
+
+    let g:tube_terminal = 'terminal'   " if you use Terminal.app 
+
 
 ==============================================================================
-2. Requirements                                            *tube-requirements*
+3. Requirements                                            *tube-requirements*
 
 * Mac OS X 10.6+ (note that this plugin has been tested only on Mac OS X 10.6
   but should work even with successive versions)
@@ -40,7 +56,7 @@ separate iTerm or Terminal window.
 * Vim compiled with python 2.x+     
 
 
-3. Aliasing                                                    *tube-aliasing*
+4. Aliasing                                                    *tube-aliasing*
 ==============================================================================
 
 With this functionality you can define your own aliases for commands easily.
@@ -51,7 +67,7 @@ remains available only for the vim session in which it was defined.
 
 
 ==============================================================================
-4. Commands                                                    *tube-commands*
+5. Commands                                                    *tube-commands*
 
 
 Tube                                                                    *Tube*
@@ -186,7 +202,7 @@ MacVim is reopened.
 
 
 ==============================================================================
-5. Settings                                                    *tube-settings*
+6. Settings                                                    *tube-settings*
 
 
 g:tube_terminal                                              *g:tube_terminal* 
@@ -243,13 +259,13 @@ default: 1
 
 
 ==============================================================================
-6. Changelog                                                  *tube-changelog*
+7. Changelog                                                  *tube-changelog*
 
 * v0.1: first release
 
 
 ==============================================================================
-7. Credits                                                      *tube-credits*
+8. Credits                                                      *tube-credits*
 
 Developed by Giacomo Comitti
 
@@ -257,7 +273,7 @@ Git repository: https://github.com/gcmt/tube.vim
 
 
 ==============================================================================
-8. License                                                      *tube-license*
+9. License                                                      *tube-license*
 
 MIT (see LICENSE.txt)
 
