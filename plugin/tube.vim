@@ -122,32 +122,22 @@ class TubeUtils:
     # }}}
 
     @staticmethod
-    def expand_functions(raw_str): # {{{
+    def expand_functions(s): # {{{
         """Inject the return value of a function in the string where the
            function is specified as "#{function_name}" in the string.
 
            The function is a vim function and can be placed into the
            .vimrc file.
         """
-        s = raw_str
-
-        match = True
-        while match:
-
-            match = re.search('#{\w*}', s)
-            if match:
-                fun_name = match.group()[2:-1]
-                if fun_name:
-                    if '1' == vim.eval("exists('*{0}')".format(fun_name)):
-                        r = vim.eval("call(function('{0}'), [])".format(fun_name))
-                    else: # the function does not exist
-                        return
+        def callf(match):
+            fun_name = match.group('fun')
+            if fun_name:
+                if '1' == vim.eval("exists('*{0}')".format(fun_name)):
+                    return vim.eval("call(function('{0}'), [])".format(fun_name))
                 else:
-                    r = ""
+                    raise ValueError
 
-                s = s[:match.start()] + r + s[match.end():]
-
-        return s   
+        return re.sub('#{(?P<fun>\w*)}', callf, s)   
     # }}}
 
 class Tube:
@@ -179,8 +169,9 @@ class Tube:
             command = TubeUtils.expand_percent_sign_with_curr_buffer(command)
 
         if command and TubeUtils.setting('function_expansion', fmt=bool):
-            command = TubeUtils.expand_functions(command)
-            if not command:
+            try:
+                command = TubeUtils.expand_functions(command)
+            except ValueError: # the function does not exist
                 TubeUtils.feedback('unknown function')
                 return
 
