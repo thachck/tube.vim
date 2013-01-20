@@ -61,13 +61,13 @@ let g:tube_terminal = 'terminal'   " if you use Terminal.app
 |                              | ------------->  .                                  .
 |                              |                 .                                  .
 |______________________________|                 ....................................
-|:Tube cd #{MyFun} & ant debug |         _______ |:Tube cd project_root & ant debug |
+|:Tube cd #{MyFun} && ant debug|         _______ |:Tube cd project_root && ant debug|
 ------------  |-----------------         |       ....................................
               |                          |                                            
  Your .vimrc  |                          |       Terminal                             
 --------------|-----------------         |      ------------------------------------- 
-|                              |         |----> | $ cd project_root & ant debug     | 
-| fu! MyFun()                  |                |                                   |
+|                              |         |----> | $ cd project_root && ant debug    | 
+| fu! MyFun()                  |                | ...                               |
 |  return "project_root"       |                |                                   |
 | endfu                        |                |                                   |
 |                              |                |                                   |
