@@ -3,7 +3,7 @@
 
                                    Tube
                  Smooth interaction between MacVim and terminal
-                                   v0.1
+                                   v0.2
 
                                      ~
                               Reference Manual
@@ -31,6 +31,9 @@ separate iTerm or Terminal window.
 
     eg. :Tube cd .. & python run_tests.py
 
+This will execute the given command in a separate terminal window mantaining the focus on the MacVim window
+
+
 ==============================================================================
 2. Installation                                            *tube-installation*
 
@@ -53,7 +56,7 @@ or
 * Mac OS X 10.6+ (note that this plugin has been tested only on Mac OS X 10.6
   but should work even with successive versions)
 * iTerm2 or Terminal installed
-* Vim compiled with python 2.x+     
+* MacVim compiled with python 2.x+     
 
 
 4. Aliasing                                                    *tube-aliasing*
@@ -69,11 +72,10 @@ remains available only for the vim session in which it was defined.
 ==============================================================================
 5. Commands                                                    *tube-commands*
 
-
 Tube                                                                    *Tube*
+------------------------------------------------------------------------------
 > arguments: a string of any length
 > e.g. Tube python % (see below for the special % character)
-
 
 Execute the command in the separate iTerm (or Terminal) window. If the that
 window does not exist yet, then it is created. If no command is given the the
@@ -91,83 +93,90 @@ be reduced to just one % character. See the g:tube_percent_sign_expansion
 setting to customize this behavior).
 
 
-
 TubeClear                                                          *TubeClear*
+------------------------------------------------------------------------------
 > arguments: a string of any length
     
 As the Tube command but force the terminal to clear the screen before
 executing the command.
 
 
-
 TubeLastCommand                                              *TubeLastCommand*
+------------------------------------------------------------------------------
 > arguments: no
 
 Send to the terminal window the last executed command.
 
 
-
 TubeInterruptCommand                                    *TubeInterruptCommand* 
+------------------------------------------------------------------------------
 > arguments: no
 
 Interrupt the current "running" command in the terminal window via the Ctrl-C
 command.
 
 
-
 TubeCd                                                                *TubeCd* 
+------------------------------------------------------------------------------
 > arguments: no
 
 Set the currrent working directory in the terminal to the current working
 directory in MacVim. 
 
 
-
 TubeClose                                                          *TubeClose* 
+------------------------------------------------------------------------------
 > arguments: no
 
 Close the terminal window.
 
 
-
 TubeToggleClearScreen                                  *TubeToggleClearScreen* 
+------------------------------------------------------------------------------
 > arguments: no
 
 Toggle the g:tube_always_clear_screen setting.
 
 
-
 TubeToggleRunBackground                              *TubeToggleRunBackground* 
+------------------------------------------------------------------------------
 > arguments: no
 
 Toggle the g:tube_run_command_background setting.
 
 
-
 TubeToggleExpandPercent                              *TubeToggleExpandPercent* 
+------------------------------------------------------------------------------
 > arguments: no
 
 Toggle the g:tube_percent_sign_expansion setting.
 
 
+TubeToggleExpandFunction                            *TubeToggleExpandFunction* 
+------------------------------------------------------------------------------
+> arguments: no
+
+Toggle the g:tube_function_expansion setting.
+
 
 TubeAlias                                                          *TubeAlias*
+------------------------------------------------------------------------------
 > arguments: a string of any length (the alias name)
 > e.g. TubeAlias my_alias
 
 Execute the command associated with the given alias.
 
 
-
 TubeRemoveAlias                                              *TubeRemoveAlias* 
+------------------------------------------------------------------------------
 > arguments: a string of any length (the alias name)
 > e.g. TubeRemoveAlias my_alias
 
 Remove the command associated with the given alias.
 
 
-
 TubeAddAlias                                                    *TubeAddAlias* 
+------------------------------------------------------------------------------
 > arguments: at least two tokens of any length. The first token will be
   interpreted as the name of the alias whereas the rest (one or more tokens)
   will be interpreted as the command.
@@ -176,23 +185,23 @@ TubeAddAlias                                                    *TubeAddAlias*
 Associate the alias name with the given command.
 
 
-
 TubeReloadAliases                                          *TubeReloadAliases* 
+------------------------------------------------------------------------------
 > arguments: no
 
 Reload the g:tube_aliases vim variable. This might be needed when the user
 change that variable at runtime.
 
 
-
 TubeAliases                                                      *TubeAliases* 
+------------------------------------------------------------------------------
 > arguments: no
 
 Show all defined aliases.
 
 
-
 TubeRemoveAllAliases                                    *TubeRemoveAllAliases* 
+------------------------------------------------------------------------------
 > arguments: no
 
 Remove all defined aliases. This affect only the current vim session. Any alias
@@ -200,12 +209,11 @@ defined in your .vimrc (see the g:tube_aliases setting) will be restored when
 MacVim is reopened.
 
 
-
 ==============================================================================
 6. Settings                                                    *tube-settings*
 
-
 g:tube_terminal                                              *g:tube_terminal* 
+------------------------------------------------------------------------------
 > values: 'iterm' or 'terminal'
 
 Use this setting to specify the terminal emulator of your choice. At the moment
@@ -214,8 +222,8 @@ only iTerm and Terminal are supported.
 default: 'terminal'
 
 
-
 g:tube_always_clear_screen                        *g:tube_always_clear_screen* 
+------------------------------------------------------------------------------
 > values: 1 or 0
 
 Setting this to 0 force the terminal to clear its screen whenever
@@ -225,8 +233,8 @@ TubeToggleClearScreen command.
 default: 0
 
 
-
 g:tube_run_command_background                  *g:tube_run_command_background* 
+------------------------------------------------------------------------------
 > values: 1 or 0
 
 Setting this to 1 to mantain the focus on the MacVim window when you execute
@@ -235,8 +243,8 @@ commands. You can toggle this setting with the TubeToggleRunBackground command.
 default: 1
 
 
-
 g:tube_aliases                                                *g:tube_aliases* 
+------------------------------------------------------------------------------
 > values: a dictionary {'alias': 'command', ...}
 
 With this dictionary you can set your own aliases for commands. Just use the
@@ -247,6 +255,7 @@ default: {}
 
 
 g:tube_percent_sign_expansion                  *g:tube_percent_sign_expansion* 
+------------------------------------------------------------------------------
 > values: 0 or 1
 
 Set this to 1 and every % character in your commands will be expanded into the
@@ -257,10 +266,22 @@ command.
 default: 1
 
 
+g:tube_function_expansion                          *g:tube_function_expansion* 
+------------------------------------------------------------------------------
+> values: 0 or 1
+
+Set this to 1 and every #{<FunctionName>} string will be expanded with the result of the FunctionName function defined by the user.
+
+default: 1       
+
 
 ==============================================================================
 7. Changelog                                                  *tube-changelog*
 
+* v0.2 - new functionality: the result of a custom vim function can be injected
+         into the command with the special notation #{CustomFunction}.
+       - minor bug fixes.
+    
 * v0.1: first release
 
 
