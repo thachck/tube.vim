@@ -2,7 +2,7 @@
 
 **v0.1**
 
-This plugin provide a tiny interface for sending commands from MacVim to a 
+This plugin provides a tiny interface for sending commands from MacVim to a 
 separate iTerm or Terminal window.
 
 
@@ -11,13 +11,13 @@ separate iTerm or Terminal window.
 * Mac OS X 10.6+ (note that this plugin has been tested only on Mac OS X 10.6
   but should work even with successive versions)
 * iTerm2 or Terminal installed
-* Vim compiled with python 2.x+
+* MacVim compiled with python 2.x+
 
 
 ## Installation
 
-Extract the content of the folder into the `.vim` folder or use your favourite 
-package manager Pathogen or Vundle.
+Extract the content of the folder into `$HOME/.vim` or use your favourite 
+package manager.
 
 To complete the installation you need to set the following variable in 
 your `.vimrc` file:
