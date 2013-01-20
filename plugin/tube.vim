@@ -133,13 +133,18 @@ class TubeUtils:
 
         match = True
         while match:
+
             match = re.search('#{\w*}', s)
             if match:
                 fun_name = match.group()[2:-1]
                 if fun_name:
-                    r = vim.eval("call(function('{0}'), [])".format(fun_name))
+                    if '1' == vim.eval("exists('*{0}')".format(fun_name)):
+                        r = vim.eval("call(function('{0}'), [])".format(fun_name))
+                    else: # the function does not exist
+                        return
                 else:
                     r = ""
+
                 s = s[:match.start()] + r + s[match.end():]
 
         return s   
@@ -170,11 +175,14 @@ class Tube:
     def run_command(self, command, clear=False): # {{{
         """Prepare the command and manage the "send command" behavior."""
 
-        if TubeUtils.setting('percent_sign_expansion', fmt=bool):
+        if command and TubeUtils.setting('percent_sign_expansion', fmt=bool):
             command = TubeUtils.expand_percent_sign_with_curr_buffer(command)
 
-        if TubeUtils.setting('function_expansion', fmt=bool):
+        if command and TubeUtils.setting('function_expansion', fmt=bool):
             command = TubeUtils.expand_functions(command)
+            if not command:
+                TubeUtils.feedback('unknown function')
+                return
 
         if (not command or clear 
             or TubeUtils.setting('always_clear_screen', fmt=bool)):
