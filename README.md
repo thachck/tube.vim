@@ -99,7 +99,7 @@ let g:tube_terminal = 'terminal'   " if you use Terminal.app
 ```
 
 If you have grasped the basic concepts above you are ready to use **Tube** but
-you want to get the most out of it read further.
+if you want to get the most out of it read further.
 
 
 ## Commands
@@ -330,7 +330,7 @@ values: 0 or 1
 default: 1
 ```
 
-Set this to 1 and every #{<FunctionName>} string will be expanded with the result of the FunctionName function defined by the user.
+Set this to 1 and every #{FunctionName} string will be expanded with the result of the FunctionName function defined by the user.
 
 
 ## Changelog
