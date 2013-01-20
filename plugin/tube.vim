@@ -110,7 +110,7 @@ class TubeUtils:
 
         return out
     # }}}
-        
+
 
 class Tube:
 
@@ -146,12 +146,7 @@ class Tube:
         os.popen("{0} '{1}'".format(base, clear_str + command))
 
         if not TubeUtils.setting('run_command_background', fmt=bool):
-            if term == 'terminal':
-                cmd = 'tell application "Terminal" to activate'
-            else:
-                cmd = 'tell application "iTerm" to activate'
-            
-            os.popen("{0} '{1}'".format(self.BASE_CMD, cmd))
+            self.focus_terminal()
 
         self.last_command = command
     # }}}
@@ -196,6 +191,17 @@ class Tube:
             cmd = 'tell application "Terminal" to quit'
         else:
             cmd = 'tell application "iTerm" to quit'
+        
+        os.popen("{0} '{1}'".format(self.BASE_CMD, cmd))
+    # }}}
+
+    def focus_terminal(self): # {{{
+        """Give focus to the terminal window."""
+        term = TubeUtils.setting('terminal').lower()
+        if term == 'terminal':
+            cmd = 'tell application "Terminal" to activate'
+        else:
+            cmd = 'tell application "iTerm" to activate'
         
         os.popen("{0} '{1}'".format(self.BASE_CMD, cmd))
     # }}}
