@@ -1,6 +1,6 @@
 ## Tube.vim
 
-**v0.1**
+**v0.2**
 
 This plugin provides a tiny interface for sending commands from MacVim to a 
 separate iTerm or Terminal window.
@@ -31,6 +31,75 @@ or
 ```
 let g:tube_terminal = 'terminal'   " if you use Terminal.app 
 ```
+ 
+
+## Visual tour
+
+### Simple example
+```
+                 focus remains here 
+ MacVim          /                           Terminal
+---------------°------------                ----------------------------
+| # hello_world.py         |                | ...                      |
+|                          |                | $ ls                     |
+| print "Hello World!"     |                | hello_world.py           |
+|                          |       -------> | $ python hello_world.py  |
+|                          |       |        | Hello World!             |
+|__________________________|       |        |                          |
+|:Tube python %            |-------|        |                          |
+----------------------------                ----------------------------
+```
+
+### Function injection
+```                    
+                       focus remains here
+ MacVim                /                          MacVim (invisible state) 
+---------------------°----------                 ....................................
+| // android file              |                 . // android file                  .
+| ...                          |                 . ...                              .
+|                              |                 .                                  .
+|                              | ------------->  .                                  .
+|                              |                 .                                  .
+|______________________________|                 ....................................
+|:Tube cd #{MyFun} & ant debug |         _______ |:Tube cd project_root & ant debug |
+------------  |-----------------         |       ....................................
+              |                          |                                            
+ Your .vimrc  |                          |       Terminal                             
+--------------|-----------------         |      ------------------------------------- 
+|                              |         |----> | $ cd project_root & ant debug     | 
+| fu! MyFun()                  |                |                                   |
+|  return "project_root"       |                |                                   |
+| endfu                        |                |                                   |
+|                              |                |                                   |
+--------------------------------                ------------------------------------- 
+```
+
+### Aliasing
+```                    
+                       focus remains here
+ MacVim                /                          MacVim (invisible state) 
+---------------------°----------                 ....................................
+| // your favourite statically |                 . // your favourite statically     .
+| // typed language            |                 . // typed language                .
+|                              |                 .                                  .
+|                              | ------------->  .                                  .
+|                              |                 .                                  .
+|______________________________|                 ....................................
+|:TubeAlias compile            |         _______ |:Tube make etc                    |
+---------------|----------------         |       ....................................
+               |                         |                                            
+ Your .vimrc   |                         |       Terminal                             
+---------------|----------------         |      ------------------------------------- 
+|                              |         |----> | $ make etc                        | 
+| let g:tube_aliases = {       |                | ...                               |
+|   \'compile':'make etc'      |                |                                   |
+|   \}                         |                |                                   |
+|                              |                |                                   |
+--------------------------------                ------------------------------------- 
+```
+
+If you have grasped the basic concepts above you are ready to use **Tube** but
+you want to get the most out of it read further.
 
 
 ## Commands
@@ -124,17 +193,25 @@ arguments: no
 Toggle the g:tube_percent_sign_expansion setting.
 
 
+### TubeToggleExpandPercent
+```
+arguments: no
+```
+
+Toggle the g:tube_percent_sign_expansion setting. 
+
+
 ## Aliasing
 
-With this functionality you can define your own aliases for commands easily. This
-might be useful when you often work with long commands easily forgettable. 
-You can define an alias at run time or in your directly `.vimrc`. In the latter
-case your aliases can persist as long as you like while in the former the alias
-remains available only for the vim session in which it was defined. 
+As you have seen in the visual tour section, this functionality let you define
+your own aliases for commands easily. This might be useful when you often work
+with long commands easily forgettable.  You can define an alias at run time or
+in your directly `.vimrc`. In the latter case your aliases can persist as long
+as you like while in the former the alias remains available only for the vim
+session in which it was defined. 
 
 
 ## Aliasing-related commands
-
 
 ### TubeAlias
 ```
@@ -247,7 +324,18 @@ the current buffer path. If you need the just the `%` character use the `%%`
 sequence. You can toggle the setting on or off with the TubeToggleExpandPercent
 command.
 
+### g:tube_function_expansion
+```
+values: 0 or 1
+default: 1
+```
+
+Set this to 1 and every #{<FunctionName>} string will be expanded with the result of the FunctionName function defined by the user.
+
 
 ## Changelog
 
+* **v0.2** 
+    - new functionality: the result of a custom vim function can be injected into the command with the special notation #{CustomFunction}.
+    - minor bug fixes.
 * **v0.1** first release
