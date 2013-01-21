@@ -104,6 +104,15 @@ class TubeUtils:
     # }}}
 
     @staticmethod
+    def num(s): # {{{
+        """Convert a string into a number."""
+        try:
+            return int(s)
+        except ValueError:
+            return float(s)
+    # }}}
+
+    @staticmethod
     def expand_percent_sign_with_curr_buffer(raw_str): # {{{
         """Expand the percent sign in a string with the current buffer path.
         
@@ -134,15 +143,34 @@ class TubeUtils:
 
            The function is a vim function.
         """
+        def format_arg(arg):
+            """s"""
+            if re.match('\d+(\.\d+)?', arg):
+                return TubeUtils.num(arg)
+            else:
+                if (arg[0] == arg[-1] == "'" or arg[0] == arg[-1] == '"'):
+                    return arg[1:-1]
+            return arg
+
         def callf(match):
+            """d"""
             fun_name = match.group('fun')
+            args = match.group('args').strip(' ,')
+
+            if args:
+                argv = [format_arg(a) for a in
+                        map(lambda a: a.strip(), args.split(','))]
+            else:
+                argv = []
+
             if fun_name:
                 if '1' == vim.eval("exists('*{0}')".format(fun_name)):
-                    return vim.eval("call(function('{0}'), [])".format(fun_name))
+                    return vim.eval("call(function('{0}'), {1})".format(
+                            fun_name, argv))
                 else:
                     raise ValueError
 
-        return re.sub('#{(?P<fun>\w*)}', callf, s)   
+        return re.sub('#{(?P<fun>\w*)(\((?P<args>.*)\))?}', callf, s)   
     # }}}
 
 class Tube:
@@ -164,8 +192,8 @@ class Tube:
             base = self.BASE_CMD_SCRIPTS + 'execute_terminal.scpt' 
 
         clr = 'clear;' if clear else ''
-        s = command.replace("'", r"\'").replace('"', r'\"').strip()
-        os.popen(base + " " + clr + s)
+        os.popen('{0} "{1}"'.format(
+            base, clr + command.replace('"', '\\"').strip()))
     # }}}
 
     def run_command(self, command, clear=False): # {{{
