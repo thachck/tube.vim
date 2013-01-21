@@ -4,8 +4,8 @@
 " Mantainer: Giacomo Comitti (https://github.com/gcmt)
 " Url: https://github.com/gcmt/tube.vim
 " License: MIT
-" Version: 0.2
-" Last Changed: 20 Jan 2013
+" Version: 0.2.1
+" Last Changed: 21 Jan 2013
 " ============================================================================
 "
 " TODO: commands history
@@ -60,7 +60,12 @@ class TubeUtils:
     @staticmethod
     def feedback(msg): # {{{
         """Display a simple feedback to the user via the command line."""
-        Utils.echom(u'[tube] ' + msg)
+        TubeUtils.echom(u'[tube] ' + msg)
+    # }}}
+
+    @staticmethod
+    def echom(msg): # {{{
+        vim.command(u'echom "{0}"'.format(msg))
     # }}}
 
     @staticmethod
@@ -124,10 +129,9 @@ class TubeUtils:
     @staticmethod
     def expand_functions(s): # {{{
         """Inject the return value of a function in the string where the
-           function is specified as "#{function_name}" in the string.
+           function is specified as #{function_name}.
 
-           The function is a vim function and can be placed into the
-           .vimrc file.
+           The function is a vim function.
         """
         def callf(match):
             fun_name = match.group('fun')
@@ -163,7 +167,8 @@ class Tube:
     # }}}
 
     def run_command(self, command, clear=False): # {{{
-        """Prepare the command and manage the "send command" behavior."""
+        """Inject the proper data in the command if required and run the 
+        command."""
 
         if command and TubeUtils.setting('percent_sign_expansion', fmt=bool):
             command = TubeUtils.expand_percent_sign_with_curr_buffer(command)
@@ -172,7 +177,7 @@ class Tube:
             try:
                 command = TubeUtils.expand_functions(command)
             except ValueError: # the function does not exist
-                TubeUtils.feedback('unknown function')
+                TubeUtils.feedback('unknown function found in the command')
                 return
 
         if (not command or clear 
@@ -216,7 +221,8 @@ class Tube:
     # }}}
 
     def cd_into_current_dir(self): # {{{
-        """Cd into the current working directory."""
+        """Set the current working directory in the terminal window to the
+        current working directory in vim."""
         self.run_command("cd " + vim.eval("getcwd()")) 
     # }}}
 
@@ -232,7 +238,7 @@ class Tube:
     # }}}
 
     def focus_terminal(self): # {{{
-        """Give focus to the terminal window."""
+        """Switch focus to the terminal window."""
         term = TubeUtils.setting('terminal').lower()
         if term == 'terminal':
             cmd = 'tell application "Terminal" to activate'
@@ -255,7 +261,11 @@ class Tube:
     # }}}
 
     def add_alias(self, args): # {{{
-        """Add a new alias fo a given command."""
+        """Add a new alias.
+        
+           this method accept a string where the first token represent the
+           alias name whereas the rest is interpreted as the command.
+        """
         try:
             alias, command = args.split(' ', 1)
             self.aliases[alias] = command
@@ -266,7 +276,11 @@ class Tube:
     # }}}
             
     def remove_alias(self, alias): # {{{
-        """Remove an alias."""
+        """Remove an alias.
+        
+           This has a temporary effect if the g:tube_aliases vim variable
+           is defined.
+        """
         try:
             del self.aliases[alias]
         except:
@@ -276,13 +290,17 @@ class Tube:
     # }}}
 
     def remove_all_aliases(self): # {{{
-        """Remove all aliases."""
+        """Remove all defined aliases.
+        
+           This has a temporary effect if the g:tube_aliases vim variable
+           is defined.
+        """
         self.aliases.clear()
         TubeUtils.feedback('all aliases successfully removed')
     # }}}
 
     def show_aliases(self): # {{{
-        """Show all aliases."""
+        """Show all defined aliases."""
         if not self.aliases:
             TubeUtils.feedback('nothing found')
             return 
@@ -298,7 +316,7 @@ class Tube:
     # }}}
 
     def reload_aliases(self): # {{{
-        """Reload the alias dictionary from th vim variable g:tube_alias.
+        """Reload the alias dictionary from the vim variable g:tube_alias.
 
             This might be needed when the user change the g:tube_aliases 
             variable at run time. 
@@ -316,7 +334,7 @@ class Tube:
     # }}}
 
     def echo_setting_state(self, sett): # {{{
-        """Display the current state of the given setting."""
+        """Show the current state of the given setting."""
         sett_state = '{0} = {1}'.format(sett, TubeUtils.setting(sett))       
         TubeUtils.feedback(sett_state)  
     # }}}
