@@ -193,12 +193,12 @@ arguments: no
 Toggle the g:tube_percent_sign_expansion setting.
 
 
-### TubeToggleExpandPercent
+### TubeToggleExpandFunction
 ```
 arguments: no
 ```
 
-Toggle the g:tube_percent_sign_expansion setting. 
+Toggle the g:tube_function_expansion setting. 
 
 
 ## Aliasing
@@ -335,10 +335,12 @@ Set this to 1 and every #{FunctionName} string will be expanded with the result 
 
 ## Changelog
 
-* **v0.2.1** 
-    - fix plugin feedback
+### v0.2.1 
+* fix plugin feedback
 
-* **v0.2.0** 
-    - new functionality: the result of a custom vim function can be injected into the command with the special notation #{CustomFunction}.
-    - minor bug fixes.
-* **v0.1.0** first release
+### v0.2.0 
+* new functionality: the result of a custom vim function can be injected into the command with the special notation #{CustomFunction}.
+* minor bug fixes.
+
+### v0.1.0
+* first release
