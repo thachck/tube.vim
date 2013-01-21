@@ -3,7 +3,7 @@
 **v0.2.1**
 
 This plugin provides a tiny interface for sending commands from MacVim to a 
-separate iTerm or Terminal window.
+separate iTerm or Terminal window without leaving MacVim.
 
 
 ## Requirements
@@ -19,7 +19,7 @@ separate iTerm or Terminal window.
 Extract the content of the folder into `$HOME/.vim` or use your favourite 
 package manager.
 
-To complete the installation you need to set the following variable in 
+To complete the installation you need to set at least the following variable in 
 your `.vimrc` file:
 
 ```
@@ -35,25 +35,25 @@ let g:tube_terminal = 'terminal'   " if you use Terminal.app
 
 ## Visual tour
 
-### Simple example
+### A simple example
 ```
                  focus remains here 
- MacVim          /                           Terminal
----------------°------------                ----------------------------
-| # hello_world.py         |                | ...                      |
-|                          |                | $ ls                     |
-| print "Hello World!"     |                | hello_world.py           |
-|                          |       -------> | $ python hello_world.py  |
-|                          |       |        | Hello World!             |
-|__________________________|       |        |                          |
-|:Tube python %            |-------|        |                          |
-----------------------------                ----------------------------
+ MacVim         /                            Terminal
+---------------°----------------                -------------------------------------
+| # hello_world.py             |                | ...                               |
+|                              |                | $ ls                              |
+| print "Hello World!"         |                | hello_world.py                    |
+|                              |       -------> | $ python hello_world.py           |
+|                              |       |        | Hello World!                      |
+|______________________________|       |        |                                   |
+|:Tube python %                |-------'        |                                   |
+--------------------------------                -------------------------------------
 ```
 
 ### Function injection
 ```                    
                        focus remains here
- MacVim                /                          MacVim (invisible state) 
+ MacVim               /                           MacVim (invisible state) 
 ---------------------°----------                 ....................................
 | // android file              |                 . // android file                  .
 | ...                          |                 . ...                              .
@@ -62,11 +62,11 @@ let g:tube_terminal = 'terminal'   " if you use Terminal.app
 |                              |                 .                                  .
 |______________________________|                 ....................................
 |:Tube cd #{MyFun} && ant debug|         _______ |:Tube cd project_root && ant debug|
-------------  |-----------------         |       ....................................
+--------------|-----------------         |       ....................................
               |                          |                                            
  Your .vimrc  |                          |       Terminal                             
 --------------|-----------------         |      ------------------------------------- 
-|                              |         |----> | $ cd project_root && ant debug    | 
+|                              |         `----> | $ cd project_root && ant debug    | 
 | fu! MyFun()                  |                | ...                               |
 |  return "project_root"       |                |                                   |
 | endfu                        |                |                                   |
@@ -77,7 +77,7 @@ let g:tube_terminal = 'terminal'   " if you use Terminal.app
 ### Aliasing
 ```                    
                        focus remains here
- MacVim                /                          MacVim (invisible state) 
+ MacVim               /                           MacVim (invisible state) 
 ---------------------°----------                 ....................................
 | // your favourite statically |                 . // your favourite statically     .
 | // typed language            |                 . // typed language                .
@@ -90,7 +90,7 @@ let g:tube_terminal = 'terminal'   " if you use Terminal.app
                |                         |                                            
  Your .vimrc   |                         |       Terminal                             
 ---------------|----------------         |      ------------------------------------- 
-|                              |         |----> | $ make etc                        | 
+|                              |         `----> | $ make etc                        | 
 | let g:tube_aliases = {       |                | ...                               |
 |   \'compile':'make etc'      |                |                                   |
 |   \}                         |                |                                   |
@@ -335,7 +335,7 @@ Set this to 1 and every #{FunctionName} string will be expanded with the result 
 
 ## Changelog
 
-* v0.2.1 
+* **v0.2.1** 
     - fix plugin feedback
 
 * **v0.2.0** 
