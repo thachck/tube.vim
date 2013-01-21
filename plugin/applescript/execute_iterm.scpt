@@ -6,7 +6,7 @@
 on run argv
 
     set command to (item 1 of argv)
-
+    
     tell application "iTerm"
 
         try

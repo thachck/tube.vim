@@ -8,7 +8,8 @@
 " Last Changed: 21 Jan 2013
 " ============================================================================
 "
-" TODO: commands history
+" TODO: 
+"   - commands history
 "
 
 " Intit -------------------------------------- {{{
@@ -163,7 +164,8 @@ class Tube:
             base = self.BASE_CMD_SCRIPTS + 'execute_terminal.scpt' 
 
         clr = 'clear;' if clear else ''
-        os.popen("{0} '{1}'".format(base, clr + command.strip()))
+        s = command.replace("'", r"\'").replace('"', r'\"').strip()
+        os.popen(base + " " + clr + s)
     # }}}
 
     def run_command(self, command, clear=False): # {{{
