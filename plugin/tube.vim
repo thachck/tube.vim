@@ -250,11 +250,11 @@ class Tube:
 
     ## ALIASES
 
-    def run_alias(self, alias): # {{{
+    def run_alias(self, alias, clear=False): # {{{
         """Lookup a command given its alias and execute that command."""
         command = self.aliases.get(alias, None)
         if command:
-            self.run_command(command)
+            self.run_command(command, clear)
             return
     
         TubeUtils.feedback('alias not found')
@@ -345,6 +345,7 @@ tube = Tube()
 END
 
 command! -nargs=1 TubeAlias python tube.run_alias(<q-args>)
+command! -nargs=1 TubeAliasClear python tube.run_alias(<q-args>, clear=True)
 command! -nargs=1 TubeRemoveAlias python tube.remove_alias(<q-args>)
 command! -nargs=+ TubeAddAlias python tube.add_alias(<q-args>)
 command! TubeReloadAliases python tube.reload_aliases()
