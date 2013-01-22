@@ -36,8 +36,12 @@ if !exists("g:tube_run_command_background")
     let g:tube_run_command_background = 1
 endif
 
-if !exists("g:tube_percent_sign_expansion")
-    let g:tube_percent_sign_expansion = 1
+if !exists("g:tube_percent_character_expansion")
+    let g:tube_percent_character_expansion = 1
+endif  
+
+if !exists("g:tube_at_character_expansion")
+    let g:tube_at_character_expansion = 1
 endif  
 
 if !exists("g:tube_function_expansion")
@@ -113,23 +117,25 @@ class TubeUtils:
     # }}}
 
     @staticmethod
-    def expand_percent_sign_with_curr_buffer(raw_str): # {{{
-        """Expand the percent sign in a string with the current buffer path.
+    def expand_chars(raw_str, target, repl): # {{{
+        """Expand the character (target) in a string (raw_str) with another 
+        string (repl) .
         
-            If two or more consecutive percent signs are found, then they are
-            compacted into one percent sign.
+            If two or more consecutive target characters are found, then they are
+            compacted into one character and no replacement is done.
         """
-        bufname = vim.current.buffer.name
+        if target not in raw_str:
+            return raw_str
 
         out = ''
         for char_group in [''.join(g) for k, g in groupby(raw_str)]:
-            if char_group == '%':
-                if bufname:
-                    out += bufname
+            if char_group == target:
+                if repl:
+                    out += repl
                 else:
                     out += ''
-            elif char_group.startswith('%'):
-                out += '%'
+            elif char_group.startswith(target):
+                out += target
             else:
                 out += char_group
 
@@ -137,14 +143,13 @@ class TubeUtils:
     # }}}
 
     @staticmethod
-    def expand_functions(s): # {{{
+    def expand_functions(raw_str): # {{{
         """Inject the return value of a function in the string where the
            function is specified as #{function_name}.
 
            The function is a vim function.
         """
         def format_arg(arg):
-            """s"""
             if re.match('\d+(\.\d+)?', arg):
                 return TubeUtils.num(arg)
             else:
@@ -153,7 +158,6 @@ class TubeUtils:
             return arg
 
         def callf(match):
-            """d"""
             fun_name = match.group('fun')
             args = match.group('args').strip(' ,')
 
@@ -170,8 +174,9 @@ class TubeUtils:
                 else:
                     raise ValueError
 
-        return re.sub('#{(?P<fun>\w*)(\((?P<args>.*)\))?}', callf, s)   
+        return re.sub('#{(?P<fun>\w*)(\((?P<args>.*)\))?}', callf, raw_str)   
     # }}}
+        
 
 class Tube:
 
@@ -196,36 +201,40 @@ class Tube:
             base, clr + command.replace('"', '\\"').strip()))
     # }}}
 
-    def run_command(self, command, clear=False): # {{{
+    def run_command(self, start, end, cmd, clear=False): # {{{
         """Inject the proper data in the command if required and run the 
         command."""
 
-        if command and TubeUtils.setting('percent_sign_expansion', fmt=bool):
-            command = TubeUtils.expand_percent_sign_with_curr_buffer(command)
+        if cmd and TubeUtils.setting('percent_character_expansion', fmt=bool):
+            cmd = TubeUtils.expand_chars(cmd, '%', vim.current.buffer.name)
 
-        if command and TubeUtils.setting('function_expansion', fmt=bool):
+        if cmd and TubeUtils.setting('at_character_expansion', fmt=bool):
+            cmd = TubeUtils.expand_chars(
+                    cmd, '@', '\r'.join(vim.current.buffer[start-1:end]))
+
+        if cmd and TubeUtils.setting('function_expansion', fmt=bool):
             try:
-                command = TubeUtils.expand_functions(command)
+                cmd = TubeUtils.expand_functions(cmd)
             except ValueError: # the function does not exist
                 TubeUtils.feedback('unknown function found in the command')
                 return
 
-        if (not command or clear 
+        if (not cmd or clear 
             or TubeUtils.setting('always_clear_screen', fmt=bool)):
-            self.run(command, clear=True)
+            self.run(cmd, clear=True)
         else:
-            self.run(command)
+            self.run(cmd)
 
         if not TubeUtils.setting('run_command_background', fmt=bool):
             self.focus_terminal()
 
-        self.last_command = command
+        self.last_command = cmd
     # }}}
 
     def run_last_command(self): # {{{
         """Execute the last executed command."""
         if self.last_command:
-            self.run_command(self.last_command)
+            self.run_command(1, 1, self.last_command)
         else:
             TubeUtils.feedback('no last command to execute')
     # }}}
@@ -253,7 +262,7 @@ class Tube:
     def cd_into_current_dir(self): # {{{
         """Set the current working directory in the terminal window to the
         current working directory in vim."""
-        self.run_command("cd " + vim.eval("getcwd()")) 
+        self.run_command(1, 1, "cd " + vim.eval("getcwd()")) 
     # }}}
 
     def close(self): # {{{
@@ -280,11 +289,11 @@ class Tube:
 
     ## ALIASES
 
-    def run_alias(self, alias, clear=False): # {{{
+    def run_alias(self, start, end, alias, clear=False): # {{{
         """Lookup a command given its alias and execute that command."""
         command = self.aliases.get(alias, None)
         if command:
-            self.run_command(command, clear)
+            self.run_command(start, end, command, clear)
             return
     
         TubeUtils.feedback('alias not found')
@@ -374,16 +383,16 @@ tube = Tube()
 
 END
 
-command! -nargs=1 TubeAlias python tube.run_alias(<q-args>)
-command! -nargs=1 TubeAliasClear python tube.run_alias(<q-args>, clear=True)
+command! -nargs=1 -range TubeAlias python tube.run_alias(<line1>, <line2>, <q-args>)
+command! -nargs=1 -range TubeAliasClear python tube.run_alias(<line1>, <line2>, <q-args>, clear=True)
 command! -nargs=1 TubeRemoveAlias python tube.remove_alias(<q-args>)
 command! -nargs=+ TubeAddAlias python tube.add_alias(<q-args>)
 command! TubeReloadAliases python tube.reload_aliases()
 command! TubeAliases python tube.show_aliases()
 command! TubeRemoveAllAliases python tube.remove_all_aliases()
 
-command! -nargs=* Tube python tube.run_command(<q-args>)
-command! -nargs=* TubeClear python tube.run_command(<q-args>, clear=True)
+command! -nargs=* -range Tube python tube.run_command(<line1>, <line2>, <q-args>)
+command! -nargs=* -range TubeClear python tube.run_command(<line1>, <line2>, <q-args>, clear=True)
 command! TubeLastCommand python tube.run_last_command()
 command! TubeInterruptCommand python tube.interrupt_running_command()
 command! TubeCd python tube.cd_into_current_dir()
