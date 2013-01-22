@@ -121,8 +121,8 @@ class TubeUtils:
         """Expand the character (target) in a string (raw_str) with another 
         string (repl) .
         
-            If two or more consecutive target characters are found, then they are
-            compacted into one character and no replacement is done.
+            If n consecutive target characters are found they are replaced with
+            n - 1 target characters, and no expansion is done.
         """
         if target not in raw_str:
             return raw_str
@@ -135,7 +135,7 @@ class TubeUtils:
                 else:
                     out += ''
             elif char_group.startswith(target):
-                out += target
+                out += char_group[:-1]
             else:
                 out += char_group
 
