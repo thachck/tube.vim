@@ -1,6 +1,6 @@
 ## Tube.vim
 
-**v0.2.1**
+**v0.3.0**
 
 This plugin provides a tiny interface for sending commands from MacVim to a 
 separate iTerm or Terminal window without leaving MacVim.
@@ -39,64 +39,100 @@ let g:tube_terminal = 'terminal'   " if you use Terminal.app
 ```
                  focus remains here 
  MacVim         /                            Terminal
----------------°----------------                -------------------------------------
-| # hello_world.py             |                | ...                               |
-|                              |                | $ ls                              |
-| print "Hello World!"         |                | hello_world.py                    |
-|                              |       -------> | $ python hello_world.py           |
-|                              |       |        | Hello World!                      |
-|______________________________|       |        |                                   |
-|:Tube python %                |-------'        |                                   |
---------------------------------                -------------------------------------
+---------------°---------------------                -------------------------------------
+| # hello_world.py                  |                | ...                               |
+|                                   |                | $ ls                              |
+| print "Hello World!"              |                | hello_world.py                    |
+|                                   |       -------> | $ python hello_world.py           |
+|                                   |       |        | Hello World!                      |
+|___________________________________|       |        |                                   |
+|:Tube python %                     |-------'        |                                   |
+--------------°----------------------                -------------------------------------
+               \
+                The % character stand for the current buffer name. If you want
+                no expansion at all, just escape it with another % character (%%).
+                Note the absence of quotes around the command.
 ```
+
+### Selection injection
+```
+                 focus remains here 
+ MacVim         /                            Terminal
+---------------°---------------------                -------------------------------------
+| # hello_world.py                  |                | ...                               |
+|                                   |                | $ python                          |
+| print "this is a selected line"   |       -------> | >>> print "this is a selected.. " |
+|                                   |       |        | this is a selected line           |
+|                                   |       |        |                                   |
+|___________________________________|       |        |                                   |
+|:'<,'>:Tube @                      |-------'        |                                   |
+-------------°-----------------------                -------------------------------------
+              \
+               The @ character stand for the current selection. If you just happen to be 
+               on a line in normal mode then the @ character will stand for the current 
+               line (in this case you'll use the plain :Tube @). If the selection spans
+               multiple lines the they are passed to the terminal as they are, that is, 
+               whitespaces.
+```                    
 
 ### Function injection
 ```                    
                        focus remains here
  MacVim               /                           MacVim (invisible state) 
----------------------°----------                 ....................................
-| // android file              |                 . // android file                  .
-| ...                          |                 . ...                              .
-|                              |                 .                                  .
-|                              | ------------->  .                                  .
-|                              |                 .                                  .
-|______________________________|                 ....................................
-|:Tube cd #{MyFun} && ant debug|         _______ |:Tube cd project_root && ant debug|
---------------|-----------------         |       ....................................
-              |                          |                                            
- Your .vimrc  |                          |       Terminal                             
---------------|-----------------         |      ------------------------------------- 
-|                              |         `----> | $ cd project_root && ant debug    | 
-| fu! MyFun()                  |                | ...                               |
-|  return "project_root"       |                |                                   |
-| endfu                        |                |                                   |
-|                              |                |                                   |
---------------------------------                ------------------------------------- 
+---------------------°---------------                 ....................................
+|                                   |                 .                                  .
+|                                   |                 .                                  .
+| // beautifully crafted code       |                 . // beautifully crafted code      .
+|                                   | ------------->  .                                  .
+|                                   |                 .                                  .
+|___________________________________|                 ....................................
+|:Tube cd #{Foo(1,'@')} && do sth   |         _______ |:Tube cd project_root && do sth   |
+--------------|--°-------------------         |       ....................................
+              |   \______________________     |                                            
+ Your .vimrc  |                          |    |       Terminal                             
+--------------|----------------------    |    |      ------------------------------------- 
+|                                   |    |    `----> | $ cd project_root && do sth       | 
+| fu! Foo(arg1, arg2)               |    |           | ...                               |
+|  // really heavy computation      |    |           |                                   |
+|  return "project_root"            |    |           |                                   |
+| endfu                             |    |           |                                   |
+|                                   |    |           |                                   |
+-------------------------------------    |           ------------------------------------- 
+              __________________________/ \___________
+             /                                        \
+  In this example we used the special         As you can see only string arguments require 
+  character @ as one of the arguments.        quotes. Also, you do not have to bother about
+  Doing so we pass the selection right        escaping yourself the string since it's done    
+  into the function as a normal argument      automatically for you. Note however that all    
+  argument (note the quotes). This might      arguments are passed to the function as strings.
+  be useful if you need to perform some 
+  kind of formatting on the selection 
+  before sending it to the terminal                 
 ```
 
 ### Aliasing
 ```                    
                        focus remains here
  MacVim               /                           MacVim (invisible state) 
----------------------°----------                 ....................................
-| // your favourite statically |                 . // your favourite statically     .
-| // typed language            |                 . // typed language                .
-|                              |                 .                                  .
-|                              | ------------->  .                                  .
-|                              |                 .                                  .
-|______________________________|                 ....................................
-|:TubeAlias compile            |         _______ |:Tube make etc                    |
----------------|----------------         |       ....................................
-               |                         |                                            
- Your .vimrc   |                         |       Terminal                             
----------------|----------------         |      ------------------------------------- 
-|                              |         `----> | $ make etc                        | 
-| let g:tube_aliases = {       |                | ...                               |
-|   \'compile':'make etc'      |                |                                   |
-|   \}                         |                |                                   |
-|                              |                |                                   |
---------------------------------                ------------------------------------- 
-```
+---------------------°---------------                 ....................................
+| // your favourite statically      |                 . // your favourite statically     .
+| // typed language                 |                 . // typed language                .
+|                                   |                 .                                  .
+|                                   | ------------->  .                                  .
+|                                   |                 .                                  .
+|___________________________________|                 ....................................
+|:TubeAlias compile                 |         _______ |:Tube make etc                    |
+---------------|---------------------         |       ....................................
+               |                              |                                            
+ Your .vimrc   |                              |       Terminal                             
+---------------|----------------              |      ------------------------------------- 
+|                              |              `----> | $ make etc                        | 
+| let g:tube_aliases = {       |                     | ...                               |
+|   \'compile':'make etc'      |                     |                                   |
+|   \}                         |                     |                                   |
+|                              |                     |                                   |
+--------------------------------                     ------------------------------------- 
+```                                         
 
 If you have grasped the basic concepts above you are ready to use **Tube** but
 if you want to get the most out of it read further.
@@ -219,7 +255,13 @@ arguments: a string of any length (the alias name)
 e.g. TubeAlias my_alias
 ```
 
-Execute the command associated with the given alias.
+### TubeAliasClear
+```
+arguments: a string of any length (the alias name)
+```  
+
+As the `TubeAlias` command but force the terminal to clear the screen before
+executing the command associated to the alias.
 
 
 ### TubeRemoveAlias
@@ -330,16 +372,21 @@ values: 0 or 1
 default: 1
 ```
 
-Set this to 1 and every #{FunctionName} string will be expanded with the result of the FunctionName function defined by the user.
+Set this to 1 and every #{FunctionName(..)} string will be expanded with the result of the FunctionName(..) function defined by the user.
 
 
 ## Changelog
+
+### v0.3.0
+* new feature: selection injection
+* new feature: functions injected into the command can now accept arguments
+* bug fixes
 
 ### v0.2.1 
 * fix plugin feedback
 
 ### v0.2.0 
-* new functionality: the result of a custom vim function can be injected into the command with the special notation #{CustomFunction}.
+* new feature: the result of a custom vim function can be injected into the command with the special notation #{CustomFunction}.
 * minor bug fixes.
 
 ### v0.1.0
