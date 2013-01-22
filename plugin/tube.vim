@@ -108,15 +108,6 @@ class TubeUtils:
     # }}}
 
     @staticmethod
-    def num(s): # {{{
-        """Convert a string into a number."""
-        try:
-            return int(s)
-        except ValueError:
-            return float(s)
-    # }}}
-
-    @staticmethod
     def expand_chars(raw_str, target, repl): # {{{
         """Expand the character (target) in a string (raw_str) with another 
         string (repl) .
@@ -148,22 +139,16 @@ class TubeUtils:
            function is specified as #{function_name}.
 
            The function is a vim function.
+           FIX: with the selector injector (@) as argument and no quotes
+           that surround it, if the selection is empty (returns nothing), 
+           the argument passing fails.
         """
-        def format_arg(arg):
-            if re.match('\d+(\.\d+)?', arg):
-                return TubeUtils.num(arg)
-            else:
-                if (arg[0] == arg[-1] == "'" or arg[0] == arg[-1] == '"'):
-                    return arg[1:-1]
-            return arg
-
         def callf(match):
             fun_name = match.group('fun')
             args = match.group('args')
 
-            if args:
-                argv = [format_arg(a) for a in
-                        map(lambda a: a.strip(), args.strip(' ,').split(','))]
+            if args:   
+                argv = [a.strip() for a in args.strip(' ,').split(',')]
             else:
                 argv = []
 
