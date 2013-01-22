@@ -38,18 +38,18 @@ let g:tube_terminal = 'terminal'   " if you use Terminal.app
 ### A simple example
 ```
                  focus remains here 
- MacVim         /                            Terminal
+ MacVim         /                                     Terminal
 ---------------°---------------------                -------------------------------------
 | # hello_world.py                  |                | ...                               |
 |                                   |                | $ ls                              |
 | print "Hello World!"              |                | hello_world.py                    |
-|                                   |       -------> | $ python hello_world.py           |
+|                                   |        ------> | $ python hello_world.py           |
 |                                   |       |        | Hello World!                      |
 |___________________________________|       |        |                                   |
 |:Tube python %                     |-------'        |                                   |
 --------------°----------------------                -------------------------------------
                \
-                The % character stand for the current buffer name. If you want
+                The % character stands for the current buffer name. If you want
                 no expansion at all, just escape it with another % character (%%).
                 Note the absence of quotes around the command.
 ```
@@ -57,19 +57,19 @@ let g:tube_terminal = 'terminal'   " if you use Terminal.app
 ### Selection injection
 ```
                  focus remains here 
- MacVim         /                            Terminal
+ MacVim         /                                     Terminal
 ---------------°---------------------                -------------------------------------
 | # hello_world.py                  |                | ...                               |
 |                                   |                | $ python                          |
-| print "this is a selected line"   |       -------> | >>> print "this is a selected.. " |
+| print "this is a selected line"   |        ------> | >>> print "this is a selected.. " |
 |                                   |       |        | this is a selected line           |
 |                                   |       |        |                                   |
 |___________________________________|       |        |                                   |
-|:'<,'>:Tube @                      |-------'        |                                   |
+|:'<,'>Tube @                       |-------'        |                                   |
 -------------°-----------------------                -------------------------------------
               \
                The @ character stand for the current selection. If you just happen to be 
-               on a line in normal mode then the @ character will stand for the current 
+               on a line in normal mode then the @ character stands for the current 
                line (in this case you'll use the plain :Tube @). If the selection spans
                multiple lines the they are passed to the terminal as they are, that is, 
                whitespaces.
@@ -78,64 +78,70 @@ let g:tube_terminal = 'terminal'   " if you use Terminal.app
 ### Function injection
 ```                    
                        focus remains here
- MacVim               /                           MacVim (invisible state) 
----------------------°---------------                 ....................................
-|                                   |                 .                                  .
-|                                   |                 .                                  .
-| // beautifully crafted code       |                 . // beautifully crafted code      .
-|                                   | ------------->  .                                  .
-|                                   |                 .                                  .
-|___________________________________|                 ....................................
-|:Tube cd #{Foo(1,'@')} && do sth   |         _______ |:Tube cd project_root && do sth   |
---------------|--°-------------------         |       ....................................
+ MacVim               /                               MacVim (invisible state) 
+---------------------°---------------                ....................................
+|                                   |                .                                  .
+|                                   |                .                                  .
+| // beautifully crafted code       |                . // beautifully crafted code      .
+|                                   | -------------> .                                  .
+|                                   |                .                                  .
+|___________________________________|                ....................................
+|:Tube cd #{Foo(1,'@')} && do sth   |          _____ |:Tube cd project_root && do sth   |
+--------------|--°-------------------         |      ....................................
               |   \______________________     |                                            
  Your .vimrc  |                          |    |       Terminal                             
---------------|----------------------    |    |      ------------------------------------- 
-|                                   |    |    `----> | $ cd project_root && do sth       | 
-| fu! Foo(arg1, arg2)               |    |           | ...                               |
-|  // really heavy computation      |    |           |                                   |
-|  return "project_root"            |    |           |                                   |
-| endfu                             |    |           |                                   |
-|                                   |    |           |                                   |
--------------------------------------    |           ------------------------------------- 
+--------------|----------------------    |    |      ------------------------------------ 
+|                                   |    |    `----> | $ cd project_root && do sth      | 
+| fu! Foo(arg1, arg2)               |    |           | ...                              |
+|  // really heavy computation      |    |           |                                  |
+|  return "project_root"            |    |           |                                  |
+| endfu                             |    |           |                                  |
+|                                   |    |           |                                  |
+-------------------------------------    |           ------------------------------------ 
+                                         |             
               __________________________/ \___________
              /                                        \
-  In this example we used the special         As you can see only string arguments require 
-  character @ as one of the arguments.        quotes. Also, you do not have to bother about
-  Doing so we pass the selection right        escaping yourself the string since it's done    
-  into the function as a normal argument      automatically for you. Note however that all    
-  argument (note the quotes). This might      arguments are passed to the function as strings.
-  be useful if you need to perform some 
-  kind of formatting on the selection 
-  before sending it to the terminal                 
+   In this example we used the special            As you can see only string arguments require 
+   character @ as one of the arguments.           quotes. Also, you do not have to bother about
+   Doing so we pass the selection right           escaping yourself the string since it's done    
+   into the function as a normal argument         automatically for you. Note however that all    
+   argument (note the quotes). This might         arguments are passed to the function as strings.
+   be useful if you need to perform some            
+   kind of formatting on the selection 
+   before sending it to the terminal                 
 ```
 
 ### Aliasing
 ```                    
                        focus remains here
- MacVim               /                           MacVim (invisible state) 
----------------------°---------------                 ....................................
-| // your favourite statically      |                 . // your favourite statically     .
-| // typed language                 |                 . // typed language                .
-|                                   |                 .                                  .
-|                                   | ------------->  .                                  .
-|                                   |                 .                                  .
-|___________________________________|                 ....................................
-|:TubeAlias compile                 |         _______ |:Tube make etc                    |
----------------|---------------------         |       ....................................
-               |                              |                                            
- Your .vimrc   |                              |       Terminal                             
----------------|----------------              |      ------------------------------------- 
-|                              |              `----> | $ make etc                        | 
-| let g:tube_aliases = {       |                     | ...                               |
-|   \'compile':'make etc'      |                     |                                   |
-|   \}                         |                     |                                   |
-|                              |                     |                                   |
---------------------------------                     ------------------------------------- 
-```                                         
-
-If you have grasped the basic concepts above you are ready to use **Tube** but
-if you want to get the most out of it read further.
+ MacVim               /                               MacVim (invisible state) 
+---------------------°---------------                ....................................
+| // a very                         |                . // a very                        .
+| // long long                      |                . // long long                     .
+| // paragraph                      |                . // paragraph                     .
+| // is selected                    | -------------> . // is selected                   .
+| ...                               |                . ...                              .
+|___________________________________|                ....................................
+|:'<,'>TubeAlias cmd                |          _____ |:Tube make etc                    |
+---------------|--°------------------         |      ....................................
+               |   \_____________________     |                                            
+ Your .vimrc   |                         |    |       Terminal                             
+---------------|---------------------    |    |      ------------------------------------ 
+|                                   |    |    `----> | $ make etc                        | 
+| let g:tube_aliases = {            |    |           | ...                               |
+|  \'cmd':'#{Format('@')} | do sth' |    |           |                                   |
+|  \}                               |    |           |                                   |
+|                                   |    |           |                                   |
+--------°-----------°----------------    |           ------------------------------------- 
+        |            \____________________\
+        |                                   Selection, function and buffer injection
+      You can define your aliases in        still work with aliasing. 
+      your .vimrc file or you can at     
+      run time. Note however that in
+      the latter case you'll lose those 
+      aliases once you quit MacVim.
+      (See Aliasing-related commands)
+```
 
 
 ## Commands
@@ -235,16 +241,6 @@ arguments: no
 ```
 
 Toggle the g:tube_function_expansion setting. 
-
-
-## Aliasing
-
-As you have seen in the visual tour section, this functionality let you define
-your own aliases for commands easily. This might be useful when you often work
-with long commands easily forgettable.  You can define an alias at run time or
-in your directly `.vimrc`. In the latter case your aliases can persist as long
-as you like while in the former the alias remains available only for the vim
-session in which it was defined. 
 
 
 ## Aliasing-related commands
