@@ -5,7 +5,7 @@
 " Url: https://github.com/gcmt/tube.vim
 " License: MIT
 " Version: 0.2.1
-" Last Changed: 21 Jan 2013
+" Last Changed: 22 Jan 2013
 " ============================================================================
 "
 " TODO: 
@@ -58,6 +58,9 @@ import vim
 import os
 import re
 from itertools import groupby
+
+import warnings
+warnings.simplefilter("ignore", DeprecationWarning)
 
 
 class TubeUtils: 
@@ -139,30 +142,41 @@ class TubeUtils:
            function is specified as #{function_name}.
 
            The function is a vim function.
-           FIX: with the selector injector (@) as argument and no quotes
-           that surround it, if the selection is empty (returns nothing), 
-           the argument passing fails.
+           FIX: not so awesome code
         """
+        def escape(a):
+            """Escape user input."""
+            if a[0] == "'" and a[-1] == "'":
+                a = '"' + a[1:-1]  + '"'
+
+            if a[0] == '"' and a[-1] == '"' and len(a) > 1:
+                r = a[1:-1].replace('\\', '\\\\').replace('"', '\\"')
+                return a[0] + r + a[-1]
+
+            elif re.match("\d+(\.\d+)?", a): # is number
+                return a
+
+            else:
+                raise ValueError
+
         def callf(match):
+            """Call the matched function and inject its return value."""
             fun_name = match.group('fun')
             args = match.group('args')
 
             if args:   
-                argv = [a.strip() for a in args.strip(' ,').split(',')]
+                argv = [escape(a.strip()) 
+                       for a in args.strip(" ,").split(',')]
             else:
                 argv = []
 
             if fun_name:
                 if '1' == vim.eval("exists('*{0}')".format(fun_name)):
                     try:
-                        return vim.eval("call(function('{0}'), {1})".format(
-                                    fun_name, argv))
-
-                    # FIX: this exeception is not raised. Need to know what is
-                    # the number arguments accepted by the function.
-                    # use 'vim.command("call Foo(args)")' instead?
+                        return vim.command("call {0}({1})".format(
+                                    fun_name, ','.join(argv)))
                     except vim.error:
-                        raise ValueError  # bad arguments
+                        pass
                 else:
                     raise NameError  # unkwown function
 
