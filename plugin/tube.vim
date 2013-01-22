@@ -159,20 +159,27 @@ class TubeUtils:
 
         def callf(match):
             fun_name = match.group('fun')
-            args = match.group('args').strip(' ,')
+            args = match.group('args')
 
             if args:
                 argv = [format_arg(a) for a in
-                        map(lambda a: a.strip(), args.split(','))]
+                        map(lambda a: a.strip(), args.strip(' ,').split(','))]
             else:
                 argv = []
 
             if fun_name:
                 if '1' == vim.eval("exists('*{0}')".format(fun_name)):
-                    return vim.eval("call(function('{0}'), {1})".format(
-                            fun_name, argv))
+                    try:
+                        return vim.eval("call(function('{0}'), {1})".format(
+                                    fun_name, argv))
+
+                    # FIX: this exeception is not raised. Need to know what is
+                    # the number arguments accepted by the function.
+                    # use 'vim.command("call Foo(args)")' instead?
+                    except vim.error:
+                        raise ValueError  # bad arguments
                 else:
-                    raise ValueError
+                    raise NameError  # unkwown function
 
         return re.sub('#{(?P<fun>\w*)(\((?P<args>.*)\))?}', callf, raw_str)   
     # }}}
@@ -215,8 +222,11 @@ class Tube:
         if cmd and TubeUtils.setting('function_expansion', fmt=bool):
             try:
                 cmd = TubeUtils.expand_functions(cmd)
-            except ValueError: # the function does not exist
-                TubeUtils.feedback('unknown function found in the command')
+            except NameError: # the function does not exist
+                TubeUtils.feedback('unknown function')
+                return
+            except ValueError: # bad arguments
+                TubeUtils.feedback('bad arguments')
                 return
 
         if (not cmd or clear 
