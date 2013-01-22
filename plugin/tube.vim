@@ -4,7 +4,7 @@
 " Mantainer: Giacomo Comitti (https://github.com/gcmt)
 " Url: https://github.com/gcmt/tube.vim
 " License: MIT
-" Version: 0.2.1
+" Version: 0.3.0
 " Last Changed: 22 Jan 2013
 " ============================================================================
 "
@@ -36,16 +36,20 @@ if !exists("g:tube_run_command_background")
     let g:tube_run_command_background = 1
 endif
 
-if !exists("g:tube_percent_character_expansion")
-    let g:tube_percent_character_expansion = 1
+if !exists("g:tube_bufname_expansion")
+    let g:tube_bufname_expansion = 1
 endif  
 
-if !exists("g:tube_at_character_expansion")
-    let g:tube_at_character_expansion = 1
+if !exists("g:tube_selection_expansion")
+    let g:tube_selection_expansion = 1
 endif  
 
 if !exists("g:tube_function_expansion")
     let g:tube_function_expansion = 1
+endif     
+
+if !exists("g:tube_enable_shortcuts")
+    let g:tube_enable_shortcuts = 0
 endif     
 
 " }}}
@@ -213,10 +217,10 @@ class Tube:
 
         cmd = cmd.replace('\\', '\\\\')
 
-        if cmd and TubeUtils.setting('percent_character_expansion', fmt=bool):
+        if cmd and TubeUtils.setting('bufname_expansion', fmt=bool):
             cmd = TubeUtils.expand_chars(cmd, '%', vim.current.buffer.name)
 
-        if cmd and TubeUtils.setting('at_character_expansion', fmt=bool):
+        if cmd and TubeUtils.setting('selection_expansion', fmt=bool):
             cmd = TubeUtils.expand_chars(
                     cmd, '@', '\r'.join(vim.current.buffer[start-1:end]))
 
@@ -411,5 +415,22 @@ command! TubeClose python tube.close()
 
 command! TubeToggleClearScreen python tube.toggle_setting('always_clear_screen')
 command! TubeToggleRunBackground python tube.toggle_setting('run_command_background')
-command! TubeToggleExpandPercent python tube.toggle_setting('percent_sign_expansion')
-command! TubeToggleExpandFunction python tube.toggle_setting('function_expansion')
+command! TubeToggleBufnameExp python tube.toggle_setting('bufname_expansion')
+command! TubeToggleFunctionExp python tube.toggle_setting('function_expansion')
+command! TubeToggleSelectionExp python tube.toggle_setting('selection_expansion')
+
+if g:tube_enable_shortcuts
+
+    command! -nargs=1 -range Ta python tube.run_alias(<line1>, <line2>, <q-args>)
+    command! -nargs=1 -range Tac python tube.run_alias(<line1>, <line2>, <q-args>, clear=True)
+    command! -nargs=1 Tar python tube.remove_alias(<q-args>)
+    command! -nargs=+ Tad python tube.add_alias(<q-args>)
+    command! Tall python tube.show_aliases()
+
+    command! -nargs=* -range T python tube.run_command(<line1>, <line2>, <q-args>)
+    command! -nargs=* -range Tc python tube.run_command(<line1>, <line2>, <q-args>, clear=True)
+    command! Tl python tube.run_last_command()
+    command! Ti python tube.interrupt_running_command()
+    command! Tcd python tube.cd_into_current_dir()
+
+endif
