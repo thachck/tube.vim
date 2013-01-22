@@ -211,6 +211,8 @@ class Tube:
         """Inject the proper data in the command if required and run the 
         command."""
 
+        cmd = cmd.replace('\\', '\\\\')
+
         if cmd and TubeUtils.setting('percent_character_expansion', fmt=bool):
             cmd = TubeUtils.expand_chars(cmd, '%', vim.current.buffer.name)
 
