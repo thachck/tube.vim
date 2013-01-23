@@ -210,7 +210,7 @@ the Ctrl-C command.
 arguments: no
 ```
 
-Execute a `cd 'current buffer name'` command in the terminal window.
+Execute a `cd 'vim current working directory'` command in the terminal window.
 
 
 ### TubeClose
