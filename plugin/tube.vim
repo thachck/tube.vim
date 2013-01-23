@@ -19,39 +19,6 @@ if exists("g:tube_loaded") || !has('python')
 endif
 let g:tube_loaded = 1
 
-
-if !exists("g:tube_terminal")
-    let g:tube_terminal = "terminal"
-endif
-
-if !exists("g:tube_always_clear_screen")
-    let g:tube_always_clear_screen = 0
-endif
-
-if !exists("g:tube_aliases")
-    let g:tube_aliases = {}
-endif
-
-if !exists("g:tube_run_command_background")
-    let g:tube_run_command_background = 1
-endif
-
-if !exists("g:tube_bufname_expansion")
-    let g:tube_bufname_expansion = 1
-endif  
-
-if !exists("g:tube_selection_expansion")
-    let g:tube_selection_expansion = 1
-endif  
-
-if !exists("g:tube_function_expansion")
-    let g:tube_function_expansion = 1
-endif     
-
-if !exists("g:tube_enable_shortcuts")
-    let g:tube_enable_shortcuts = 0
-endif     
-
 " }}}
 
 python << END
@@ -63,7 +30,7 @@ import os
 import re
 from itertools import groupby
 
-# hide deprecation warnings in case of errors
+# avoid deprecation warnings to be displayed to the user
 import warnings
 warnings.simplefilter("ignore", DeprecationWarning)
 
@@ -192,11 +159,29 @@ class TubeUtils:
 class Tube:
 
     def __init__(self): # {{{
+        self.init_settings()
         self.PLUGIN_PATH = vim.eval("expand('<sfile>:h')")
         self.BASE_CMD_SCRIPTS = "osascript " + self.PLUGIN_PATH + "/applescript/"
         self.BASE_CMD = 'osascript -e'
         self.aliases = TubeUtils.setting('aliases', fmt=dict)
         self.last_command = ''
+    # }}}
+
+    def init_settings(self): # {{{
+        settings = {
+            'terminal' : 'terminal',
+            'always_clear_screen' : 0,
+            'aliases': {},
+            'run_command_background': 1,
+            'bufname_expansion': 1,
+            'selection_expansion': 1,
+            'function_expansion': 1,
+            'enable_shortcuts': 0
+        }
+
+        for s in settings:
+            if vim.eval("!exists('g:tube_{0}')".format(s)) == '1':
+                TubeUtils.let(s, settings[s])
     # }}}
 
     def run(self, command, clear=False): # {{{
@@ -277,10 +262,11 @@ class Tube:
         os.popen("{0} '{1}'".format(self.BASE_CMD, cmd))
     # }}}
 
-    def cd_into_vim_cwd(self):
+    def cd_into_vim_cwd(self): # {{{
         """Send the terminal window a cd command with the vim current working
         directory."""
         self.run_command(1, 1, "cd {0}".format(vim.eval("getcwd()")))
+    # }}}
 
     def close(self): # {{{
         """Close the terminal window."""
