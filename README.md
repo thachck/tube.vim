@@ -405,7 +405,7 @@ default: 1
 Set this variable to 1 to enable selection expansion. Every `@` character inside
 commands will be replaced with the current selection. In order to get the
 current selection you must use a Tube command the way you usually do with vim
-commands: `:'&lt;,'&gt;Tube command`. If no selection is found, then the current 
+commands: `:'<,'>;Tube command`. If no selection is found, then the current 
 line is taken.
 
 
