@@ -71,8 +71,8 @@ let g:tube_terminal = 'terminal'   " if you use Terminal.app
                The @ character stand for the current selection. If you just happen to be
                on a line in normal mode then the @ character stands for the current
                line (in this case you'll use the plain :Tube @). If the selection spans
-               multiple lines the they are passed to the terminal as they are, that is,
-               whitespaces.
+               multiple lines they are passed to the terminal as they are, that is,
+               whitespaces are preserved.
 ```
 
 ### Function injection
@@ -105,10 +105,10 @@ let g:tube_terminal = 'terminal'   " if you use Terminal.app
    character @ as one of the arguments.           quotes. Also, you do not have to bother about
    Doing so we pass the selection right           escaping yourself the string since it's done
    into the function as a normal argument         automatically for you. Note however that all
-   argument (note the quotes). This might         arguments are passed to the function as strings.
-   be useful if you need to perform some
-   kind of formatting on the selection
-   before sending it to the terminal
+   (note the quotes). This might be useful        arguments are passed to the function as strings.
+   if you need to perform some kind of 
+   formatting on the selection before sending 
+   it to the terminal.
 ```
 
 ### Aliasing
@@ -136,11 +136,10 @@ let g:tube_terminal = 'terminal'   " if you use Terminal.app
         |            \____________________\
         |                                   Selection, function and buffer injection
       You can define aliases in your        still work with aliasing.
-      .vimrc file or at runtime. Note
-      however that in the latter case
-      you'll lose those the aliases
-      once you quit MacVim. (See
-      Aliasing-related commands)
+      .vimrc file or at runtime. Keep
+      in mind that in the latter case
+      you'll lose those aliases once 
+      you quit MacVim.
 ```
 
 
@@ -168,7 +167,11 @@ information into the command:
 * `@`: inject the current selection or the current line if there is no selected
   text. Note that block selection is not supported.
 * `#{FunctionName(arg1, .., argn)}`: inject the return value of the user function
-  named FunctionName.
+  named FunctionName. String arguments need to be wrapped with single or double
+  quotes but you don't need to bother about escaping quotes in your string:
+  it's done automatically for you. Another nicety is that you can use the special 
+  characters `%` and `@` even as arguments of the function. Just remember to
+  wrap the with quotes too.
 
   **NOTE**: if you need a plain `%` or `@` character in your command just append
   the same character twice, respectively `%%` and `@@`
