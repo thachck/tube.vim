@@ -277,6 +277,11 @@ class Tube:
         os.popen("{0} '{1}'".format(self.BASE_CMD, cmd))
     # }}}
 
+    def cd_into_vim_cwd(self):
+        """Send the terminal window a cd command with the vim current working
+        directory."""
+        self.run_command(1, 1, "cd {0}".format(vim.eval("getcwd()")))
+
     def close(self): # {{{
         """Close the terminal window."""
         term = TubeUtils.setting('terminal').lower()
@@ -407,7 +412,7 @@ command! -nargs=* -range Tube python tube.run_command(<line1>, <line2>, <q-args>
 command! -nargs=* -range TubeClear python tube.run_command(<line1>, <line2>, <q-args>, clear=True)
 command! TubeLastCommand python tube.run_last_command()
 command! TubeInterruptCommand python tube.interrupt_running_command()
-command! TubeCd python tube.run_command(1, 1, "cd %")
+command! TubeCd python tube.cd_into_vim_cwd()
 command! TubeClose python tube.close()
 
 command! TubeToggleClearScreen python tube.toggle_setting('always_clear_screen')
@@ -428,6 +433,6 @@ if g:tube_enable_shortcuts
     command! -nargs=* -range Tc python tube.run_command(<line1>, <line2>, <q-args>, clear=True)
     command! Tl python tube.run_last_command()
     command! Ti python tube.interrupt_running_command()
-    command! Tcd python tube.run_command(1, 1, "cd %")
+    command! Tcd python tube.cd_into_vim_cwd()
 
 endif
