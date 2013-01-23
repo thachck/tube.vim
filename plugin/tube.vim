@@ -145,7 +145,7 @@ class TubeUtils:
             if fun_name:
                 if '1' == vim.eval("exists('*{0}')".format(fun_name)):
                     try:
-                        return vim.command("call {0}({1})".format(
+                        return vim.eval("call('{0}',[{1}])".format(
                                     fun_name, ','.join(argv)))
                     except vim.error:
                         pass
