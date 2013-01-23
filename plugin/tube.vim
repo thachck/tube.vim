@@ -63,6 +63,7 @@ import os
 import re
 from itertools import groupby
 
+# hide deprecation warnings in case of errors
 import warnings
 warnings.simplefilter("ignore", DeprecationWarning)
 
@@ -211,28 +212,30 @@ class Tube:
             base, clr + command.replace('"', '\\"').strip()))
     # }}}
 
-    def run_command(self, start, end, cmd, clear=False): # {{{
+    def run_command(self, start, end, cmd, clear=False, parse=True): # {{{
         """Inject the proper data in the command if required and run the 
         command."""
 
-        cmd = cmd.replace('\\', '\\\\')
+        if parse:
 
-        if cmd and TubeUtils.setting('bufname_expansion', fmt=bool):
-            cmd = TubeUtils.expand_chars(cmd, '%', vim.current.buffer.name)
+            cmd = cmd.replace('\\', '\\\\')
 
-        if cmd and TubeUtils.setting('selection_expansion', fmt=bool):
-            cmd = TubeUtils.expand_chars(
-                    cmd, '@', '\r'.join(vim.current.buffer[start-1:end]))
+            if cmd and TubeUtils.setting('bufname_expansion', fmt=bool):
+                cmd = TubeUtils.expand_chars(cmd, '%', vim.current.buffer.name)
 
-        if cmd and TubeUtils.setting('function_expansion', fmt=bool):
-            try:
-                cmd = TubeUtils.expand_functions(cmd)
-            except NameError: # the function does not exist
-                TubeUtils.feedback('unknown function')
-                return
-            except ValueError: # bad arguments
-                TubeUtils.feedback('bad arguments')
-                return
+            if cmd and TubeUtils.setting('selection_expansion', fmt=bool):
+                cmd = TubeUtils.expand_chars(
+                        cmd, '@', '\r'.join(vim.current.buffer[start-1:end]))
+
+            if cmd and TubeUtils.setting('function_expansion', fmt=bool):
+                try:
+                    cmd = TubeUtils.expand_functions(cmd)
+                except NameError: # the function does not exist
+                    TubeUtils.feedback('unknown function')
+                    return
+                except ValueError: # bad arguments
+                    TubeUtils.feedback('bad arguments')
+                    return
 
         if (not cmd or clear 
             or TubeUtils.setting('always_clear_screen', fmt=bool)):
@@ -249,7 +252,7 @@ class Tube:
     def run_last_command(self): # {{{
         """Execute the last executed command."""
         if self.last_command:
-            self.run_command(1, 1, self.last_command)
+            self.run_command(1, 1, self.last_command, parse=False)
         else:
             TubeUtils.feedback('no last command to execute')
     # }}}
@@ -272,12 +275,6 @@ class Tube:
             cmd = cmd.format("iTerm")
 
         os.popen("{0} '{1}'".format(self.BASE_CMD, cmd))
-    # }}}
-
-    def cd_into_current_dir(self): # {{{
-        """Set the current working directory in the terminal window to the
-        current working directory in vim."""
-        self.run_command(1, 1, "cd " + vim.eval("getcwd()")) 
     # }}}
 
     def close(self): # {{{
@@ -410,7 +407,7 @@ command! -nargs=* -range Tube python tube.run_command(<line1>, <line2>, <q-args>
 command! -nargs=* -range TubeClear python tube.run_command(<line1>, <line2>, <q-args>, clear=True)
 command! TubeLastCommand python tube.run_last_command()
 command! TubeInterruptCommand python tube.interrupt_running_command()
-command! TubeCd python tube.cd_into_current_dir()
+command! TubeCd python tube.run_command("cd %")
 command! TubeClose python tube.close()
 
 command! TubeToggleClearScreen python tube.toggle_setting('always_clear_screen')
@@ -431,6 +428,6 @@ if g:tube_enable_shortcuts
     command! -nargs=* -range Tc python tube.run_command(<line1>, <line2>, <q-args>, clear=True)
     command! Tl python tube.run_last_command()
     command! Ti python tube.interrupt_running_command()
-    command! Tcd python tube.cd_into_current_dir()
+    command! Tcd python tube.run_command("cd %")
 
 endif
