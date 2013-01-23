@@ -407,7 +407,7 @@ command! -nargs=* -range Tube python tube.run_command(<line1>, <line2>, <q-args>
 command! -nargs=* -range TubeClear python tube.run_command(<line1>, <line2>, <q-args>, clear=True)
 command! TubeLastCommand python tube.run_last_command()
 command! TubeInterruptCommand python tube.interrupt_running_command()
-command! TubeCd python tube.run_command("cd %")
+command! TubeCd python tube.run_command(1, 1, "cd %")
 command! TubeClose python tube.close()
 
 command! TubeToggleClearScreen python tube.toggle_setting('always_clear_screen')
@@ -428,6 +428,6 @@ if g:tube_enable_shortcuts
     command! -nargs=* -range Tc python tube.run_command(<line1>, <line2>, <q-args>, clear=True)
     command! Tl python tube.run_last_command()
     command! Ti python tube.interrupt_running_command()
-    command! Tcd python tube.run_command("cd %")
+    command! Tcd python tube.run_command(1, 1, "cd %")
 
 endif
