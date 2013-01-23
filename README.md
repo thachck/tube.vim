@@ -149,7 +149,7 @@ let g:tube_terminal = 'terminal'   " if you use Terminal.app
 ### Tube
 ```
 arguments: a string of any length (the command)
-accept selection: yes
+accepts selection: yes
 ```
 
 Execute the command in the separate iTerm (or Terminal) window. If the that
@@ -180,7 +180,7 @@ information into the command:
 ### TubeClear
 ```
 arguments: a string of any length (the command)
-accept selection: yes
+accepts selection: yes
 ```
 
 As the `Tube` command but force the terminal to clear its screen before
@@ -201,7 +201,7 @@ Execute the last executed command.
 arguments: no
 ```
 
-Interrupt the current running command in the terminal window. Under the hood it calls
+Interrupt the current running command in the terminal window. Under the hood this sends
 the Ctrl-C command.
 
 
@@ -224,7 +224,7 @@ Close the terminal window.
 ### TubeAlias
 ```
 arguments: a string of any length (the alias name)
-accept selection: yes
+accepts selection: yes
 ```
 
 Execute the command associated with the given alias name. The alias might be
@@ -235,7 +235,7 @@ via the `TubeAddAlias` command.
 ### TubeAliasClear
 ```
 arguments: a string of any length (the alias name)
-accept selection: yes
+accepts selection: yes
 ```
 
 As the `TubeAlias` command but force the terminal to clear its screen before
@@ -245,7 +245,7 @@ executing the command associated with the alias.
 ### TubeRemoveAlias
 ```
 arguments: a string of any length (the alias name)
-e.g. TubeRemoveAlias my_alias
+e.g. TubeRemoveAlias myalias
 ```
 
 Remove the command associated with the given alias.
@@ -253,7 +253,7 @@ Remove the command associated with the given alias.
 
 ### TubeAddAlias
 ```
-arguments: at least two tokens of any length.
+arguments: at least two tokens of any length
 e.g. TubeAddAlias myalias cd into/that & rm all
 ```
 
@@ -405,7 +405,7 @@ default: 1
 Set this variable to 1 to enable selection expansion. Every `@` character inside
 commands will be replaced with the current selection. In order to get the
 current selection you must use a Tube command the way you usually do with vim
-commands: `:'<,'>Tube command`. If no selection is found, then the current 
+commands: `:'&lt;,'&gt;Tube command`. If no selection is found, then the current 
 line is taken.
 
 
@@ -415,7 +415,7 @@ values: 0 or 1
 default: 0
 ```
 
-Set this to 1 to to enable shortcuts for the most important commands.
+Set this variable to 1 to to enable shortcuts for the most important commands:
 
 * `T`: Tube
 * `Tc`: TubeClear
