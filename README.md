@@ -453,8 +453,8 @@ you don't use your separator sequence in arguments.
 
 ## For the python programmer
 
-The function below might be used by an python programmer to test an arbitray
-selected function, assuming the python interpreter is runing in the terminal
+The function below might be used by a python programmer to test an arbitrary
+selected function, assuming that the python interpreter is running in the terminal
 window:
 
 ```
@@ -499,7 +499,7 @@ This function is smart enough to ask the user the required arguments if any.
 
 ## For the android programmer
 
-The function below might be used by an Android programmer to run the project
+The function below might be used by an android programmer to run the android project
 compilation from wherever he is in the android project directory tree:
 
 ```
@@ -525,6 +525,7 @@ function! AndroidProjectRoot()
     END
     return g:android_project_root
 endfunction
+```
 
 ## Changelog
 
