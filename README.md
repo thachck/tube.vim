@@ -461,14 +461,14 @@ window:
 :'<,'>Tube #{PyFun('@')}       
 ```          
 
-This function is smart enough to ask the user the required arguments if any. 
+This function is smart enough to ask the user the required arguments. 
 ```
     function! PyFun(function_text)
-        let g:_temp_var = a:function_text
+        let g:py_fun = a:function_text
         python << END
         import vim, itertools
 
-        flines = vim.eval('g:_temp_var').split('\r')
+        flines = vim.eval('g:py_fun').split('\r')
 
         # delete blank lines
         flines = [l for l in flines if l != '']
@@ -480,7 +480,7 @@ This function is smart enough to ask the user the required arguments if any.
 
         match = re.match('def (?P<fun>\w+)\((?P<params>.*)\)', flines[0])
 
-        # if the function require arguments, ask the user for them
+        # if the function requires arguments, ask the user for them
         fparams = match.group('params')
         if fparams:
             args = vim.eval("input('args (use commas to separate them): ')")
@@ -490,9 +490,9 @@ This function is smart enough to ask the user the required arguments if any.
         # append a call to the function with the given arguments
         flines.append("\r{0}({1})".format(match.group('fun'), args))
 
-        vim.command(u"let g:_temp_var = '{0}'".format('\r'.join(flines)))
+        vim.command("let g:py_fun = '{0}'".format('\r'.join(flines)))
         END
-        return g:_temp_var
+        return g:py_fun
     endfunction
 ```
 
@@ -521,9 +521,9 @@ function! AndroidProjectRoot()
             return android_project_root(os.path.split(path)[0])
 
     cwd = vim.eval('getcwd()')
-    vim.command(u"let g:_temp_var = '{0}'".format(android_project_root(cwd)))
+    vim.command("let g:and_project_root = '{0}'".format(android_project_root(cwd)))
     END
-    return g:android_project_root
+    return g:and_project_root
 endfunction
 ```
 
