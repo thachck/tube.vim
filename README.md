@@ -11,7 +11,7 @@ separate iTerm or Terminal window without leaving MacVim.
 * Mac OS X 10.6+ (note that this plugin has been tested only on Mac OS X 10.6
   but should work even with successive versions)
 * iTerm2 or Terminal installed
-* MacVim compiled with python 2.x+
+* MacVim compiled with python 2.x
 
 
 ## Installation
@@ -99,16 +99,16 @@ let g:tube_terminal = 'terminal'   " if you use Terminal.app
 |                                   |    |           |                                  |
 -------------------------------------    |           ------------------------------------
                                          |
-              __________________________/ \___________
-             /                                        \
+              __________________________/ \__________________________
+             /                                                       \
    In this example we used the special            As you can see only string arguments require
    character @ as one of the arguments.           quotes. Also, you do not have to bother about
    Doing so we pass the selection right           escaping yourself the string since it's done
    into the function as a normal argument         automatically for you. 
    (note the quotes). This might be useful        
-   if you need to perform some kind of            Note the ackward ^^ arguments separator. Since            
-   formatting on the selection before sending.    you are not required to escape yourself the
-                                                  arguments (since they might come from an arbitrary
+   if you need to perform some kind of            Note the awkward ^^ arguments separator. Since            
+   formatting on the selection before             you are not required to escape yourself the
+   passing it to the function.                    arguments (since they might come from an arbitrary
                                                   selection and injected via the @ character) there
                                                   is no way to determine where an arguments start or 
                                                   end. Commas just don't fit as separator since they
@@ -118,7 +118,7 @@ let g:tube_terminal = 'terminal'   " if you use Terminal.app
                                                   setting.
 ```
 
-**You can see some useful examples of function injection further in the ducumentation** 
+You can see some useful examples of function injection further in the ducumentation.
 
 ### Aliasing
 ```
@@ -144,8 +144,8 @@ let g:tube_terminal = 'terminal'   " if you use Terminal.app
 --------°-----------°----------------    |           -------------------------------------
         |            \____________________\
         |                                   Selection, function and buffer injection
-      You can define aliases in your        still work with aliasing.
-      .vimrc file or at runtime. Keep
+      You can define aliases in your        still work with aliasing.                
+      .vimrc file or at runtime. Keep        
       in mind that in the latter case
       you'll lose those aliases once 
       you quit MacVim.
