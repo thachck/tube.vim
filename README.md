@@ -534,6 +534,7 @@ endfunction
   Now to separate arguments is required the special sequence '^^'
 * added g:tube_funargs_separator setting to let the user define its own
   preferred characters sequence to separate arguments of injected function.
+* fixed escaping for the '$' character.
 
 ### v0.3.0
 * new feature: selection injection into the command with the @ character.

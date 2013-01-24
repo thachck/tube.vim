@@ -4,7 +4,7 @@
 " Mantainer: Giacomo Comitti (https://github.com/gcmt)
 " Url: https://github.com/gcmt/tube.vim
 " License: MIT
-" Version: 0.3.0
+" Version: 0.3.1
 " Last Changed: 22 Jan 2013
 " ============================================================================
 "
@@ -196,7 +196,7 @@ class Tube:
 
         clr = 'clear;' if clear else ''
         os.popen('{0} "{1}"'.format(
-            base, clr + command.replace('"', '\\"').strip()))
+            base, clr + command.replace('"', '\\"').replace('$', '\$').strip()))
     # }}}
 
     def run_command(self, start, end, cmd, clear=False, parse=True): # {{{
