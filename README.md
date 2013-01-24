@@ -449,9 +449,9 @@ because of its rare usage by the plugin author. You can change that as long as
 you don't use your separator sequence in arguments.
 
 
-### Useful examples of function injection
+## Useful examples of function injection
 
-## For the python programmer
+### For the python programmer
 
 The function below might be used by a python programmer to test an arbitrary
 selected function, assuming that the python interpreter is running in the terminal
@@ -497,7 +497,7 @@ This function is smart enough to ask the user the required arguments if any.
 ```
 
 
-## For the android programmer
+### For the android programmer
 
 The function below might be used by an android programmer to run the android project
 compilation from wherever he is in the android project directory tree:
@@ -521,7 +521,7 @@ function! AndroidProjectRoot()
             return android_project_root(os.path.split(path)[0])
 
     cwd = vim.eval('getcwd()')
-    vim.command(u"let g:_temp_var = '{0}'".format(find_android_project_root(cwd)))
+    vim.command(u"let g:_temp_var = '{0}'".format(android_project_root(cwd)))
     END
     return g:android_project_root
 endfunction
