@@ -135,10 +135,11 @@ class TubeUtils:
             """Call the matched function and inject its return value."""
             fun_name = match.group('fun')
             args = match.group('args')
+            args_separator = TubeUtils.setting('funargs_separator')
 
             if args:   
                 argv = [escape(a.strip()) 
-                       for a in args.strip(" ,").split(',')]
+                        for a in args.split(args_separator)]
             else:
                 argv = []
 
@@ -176,7 +177,8 @@ class Tube:
             'bufname_expansion': 1,
             'selection_expansion': 1,
             'function_expansion': 1,
-            'enable_shortcuts': 0
+            'enable_shortcuts': 0,
+            'funargs_separator': '^^'
         }
 
         for s in settings:
