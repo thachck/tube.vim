@@ -5,7 +5,7 @@
 " Url: https://github.com/gcmt/tube.vim
 " License: MIT
 " Version: 0.3.1
-" Last Changed: 22 Jan 2013
+" Last Changed: 30 Jan 2013
 " ============================================================================
 "
 " TODO: 
@@ -214,7 +214,7 @@ class Tube:
 
             if cmd and TubeUtils.setting('selection_expansion', fmt=bool):
                 cmd = TubeUtils.expand_chars(
-                        cmd, '@', '\n'.join(vim.current.buffer[start-1:end]))
+                        cmd, '@', '\r'.join(vim.current.buffer[start-1:end]))
 
             if cmd and TubeUtils.setting('function_expansion', fmt=bool):
                 try:
