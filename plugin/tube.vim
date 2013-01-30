@@ -146,8 +146,10 @@ class TubeUtils:
             if fun_name:
                 if '1' == vim.eval("exists('*{0}')".format(fun_name)):
                     try:
-                        return vim.eval("call('{0}',[{1}])".format(
+                        raw = vim.eval("call('{0}',[{1}])".format(
                                     fun_name, ','.join(argv)))
+                        return raw.replace('\\', '\\\\')
+
                     except vim.error:
                         pass
                 else:
@@ -186,7 +188,7 @@ class Tube:
                 TubeUtils.let(s, settings[s])
     # }}}
 
-    def run(self, command, clear=False): # {{{
+    def run(self, cmd, clear=False): # {{{
         """Send the command to the terminal emulator of choice"""
         term = TubeUtils.setting('terminal').lower()
         if term == 'iterm':
@@ -195,8 +197,10 @@ class Tube:
             base = self.BASE_CMD_SCRIPTS + 'execute_terminal.scpt' 
 
         clr = 'clear;' if clear else ''
-        os.popen('{0} "{1}"'.format(
-            base, clr + command.replace('"', '\\"').replace('$', '\$').strip()))
+        cmd = cmd.replace('\\', '\\\\')
+        cmd = cmd.replace('"', '\\"')
+        cmd = cmd.replace('$', '\$')
+        os.popen('{0} "{1}"'.format(base, clr + cmd.strip()))
     # }}}
 
     def run_command(self, start, end, cmd, clear=False, parse=True): # {{{
@@ -205,14 +209,12 @@ class Tube:
 
         if parse:
 
-            cmd = cmd.replace('\\', '\\\\')
-
             if cmd and TubeUtils.setting('bufname_expansion', fmt=bool):
                 cmd = TubeUtils.expand_chars(cmd, '%', vim.current.buffer.name)
 
             if cmd and TubeUtils.setting('selection_expansion', fmt=bool):
                 cmd = TubeUtils.expand_chars(
-                        cmd, '@', '\r'.join(vim.current.buffer[start-1:end]))
+                        cmd, '@', '\n'.join(vim.current.buffer[start-1:end]))
 
             if cmd and TubeUtils.setting('function_expansion', fmt=bool):
                 try:
