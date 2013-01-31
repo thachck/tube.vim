@@ -11,7 +11,7 @@ separate iTerm or Terminal window without leaving MacVim.
 * Mac OS X 10.6+ (note that this plugin has been tested only on Mac OS X 10.6
   but should work even with successive versions)
 * iTerm2 or Terminal installed
-* MacVim compiled with python 2.x
+* MacVim compiled with python 2.7+
 
 
 ## Installation
