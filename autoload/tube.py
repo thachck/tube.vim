@@ -95,9 +95,9 @@ class TubePlugin:
 
     def RunAlias(self, start, end, alias, clear=False):
         """Lookup a command given its alias and execute that command."""
-        command = self.aliases.get(alias, None)
+        command = self.alias_manager.get(alias)
         if command:
-            self.run_command(start, end, command, clear)
+            self.RunCommand(start, end, command, clear)
             return
 
         self.echo.echom('alias not found')
@@ -105,7 +105,7 @@ class TubePlugin:
     def RunLastCommand(self):
         """Execute the last executed command."""
         if self.last_command:
-            self.run_command(1, 1, self.last_command, parse=False)
+            self.RunCommand(1, 1, self.last_command, parse=False)
         else:
             self.echo.echom('no last command to execute')
 
@@ -131,7 +131,7 @@ class TubePlugin:
     def CdIntoVimCwd(self):
         """Send the terminal window a cd command with the vim current working
         directory."""
-        self.run_command(1, 1, "cd {0}".format(vim.eval("getcwd()")))
+        self.RunCommand(1, 1, "cd {0}".format(vim.eval("getcwd()")))
 
     def CloseTerminalWindow(self):
         """Close the terminal window."""

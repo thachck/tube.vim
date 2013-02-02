@@ -2,6 +2,7 @@
 
 import vim
 import tube.utils.settings
+import tube.utils.echo
 
 
 class AliasManager:
@@ -10,8 +11,11 @@ class AliasManager:
 
         # modules reference shortcuts
         self.settings = tube.utils.settings
+        self.echo = tube.utils.echo
 
         self.aliases = self.settings.get('aliases')
+
+    ## INTERNALS
 
     def init_settings(self):
         sett = {
@@ -22,7 +26,13 @@ class AliasManager:
             if vim.eval("!exists('g:tube_{0}')".format(s)) == '1':
                 self.settings.set(s, val)
 
-    def add_alias(self, args):
+    def get(self, alias):
+        """To return an alias if exists."""
+        return self.aliases.get(alias)
+
+    ## INTERFACE METHODS
+
+    def AddAlias(self, args):
         """Add a new alias.
 
            this method accept a string where the first token represent the
@@ -36,7 +46,7 @@ class AliasManager:
         else:
             self.echo.echom('alias successfully added')
 
-    def remove_alias(self, alias):
+    def RemoveAlias(self, alias):
         """Remove an alias.
 
            This has a temporary effect if the g:tube_aliases vim variable
@@ -49,7 +59,7 @@ class AliasManager:
         else:
             self.echo.echom('alias successfully removed')
 
-    def remove_all_aliases(self):
+    def RemoveAllAliases(self):
         """Remove all defined aliases.
 
            This has a temporary effect if the g:tube_aliases vim variable
@@ -58,7 +68,7 @@ class AliasManager:
         self.aliases.clear()
         self.echo.echom('all aliases successfully removed')
 
-    def show_aliases(self):
+    def ShowAliases(self):
         """Show all defined aliases."""
         if not self.aliases:
             self.echo.echom('nothing found')
@@ -73,7 +83,7 @@ class AliasManager:
                 conn = '├─ '
             print(conn + alias + ': ' + self.aliases[alias])
 
-    def reload_aliases(self):
+    def ReloadAliases(self):
         """Reload the alias dictionary from the vim variable g:tube_alias.
 
             This might be needed when the user change the g:tube_aliases
