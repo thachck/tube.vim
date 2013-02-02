@@ -63,6 +63,7 @@ command! -nargs=+ TubeAddAlias call tube#AddAlias(<q-args>)
 command! TubeReloadAliases call tube#ReloadAliases()
 command! TubeAliases call tube#ShowAliases()
 command! TubeRemoveAllAliases call tube#RemoveAllAliases()
+command! TubeShowAliases call tube#ShowAliases()
 
 command! TubeToggleClearScreen call tube#ToggleClearScreen()
 command! TubeToggleRunBackground call tube#ToggleRunBackground()
