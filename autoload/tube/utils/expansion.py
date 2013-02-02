@@ -2,6 +2,7 @@
 
 import re
 import vim
+import tube.utils.settings
 from itertools import groupby
 
 

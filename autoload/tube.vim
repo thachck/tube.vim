@@ -51,7 +51,7 @@ function! tube#AliasClear(start, end, args)
 endfunction
 
 function! tube#RemoveAlias(alias)
-    py tube_plugin.RemoveAlias(vim.eval('a:alias'))
+    py tube_plugin.alias_manager.RemoveAlias(vim.eval('a:alias'))
 endfunction
 
 function! tube#AddAlias(args)
