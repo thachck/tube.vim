@@ -13,6 +13,8 @@ class AliasManager:
         self.settings = tube.utils.settings
         self.echo = tube.utils.echo
 
+        self.init_settings()
+
         self.aliases = self.settings.get('aliases')
 
     ## INTERNALS
