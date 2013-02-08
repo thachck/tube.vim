@@ -30,13 +30,6 @@ if v:version < 703
     finish
 endif
 
-python << END
-import vim, sys
-
-if sys.version_info[:2] < (2, 6):
-    vim.command('let s:unsupported_python = 1')
-END
-
 if exists('s:unsupported_python')
     echohl WarningMsg | echom "Tube requires vim to be compiled with Python 2.6+" | echohl None
     finish
@@ -71,7 +64,7 @@ command! TubeToggleBufnameExp call tube#ToggleBufnameExp()
 command! TubeToggleFunctionExp call tube#ToggleFunctionExp()
 command! TubeToggleSelectionExp call tube#ToggleSelectionExp()
 
-if exists('g:tube_enable_shortcuts') && g:tube_enable_shortcuts
+if get(g:, 'tube_enable_shortcuts', 0)
 
     command! -nargs=* -range T call tube#RunCommand(<line1>, <line2>, <q-args>)
     command! -nargs=* -range Tc call tube#RunCommandClear(<line1>, <line2>, <q-args>)
