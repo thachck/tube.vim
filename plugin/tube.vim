@@ -10,28 +10,13 @@
 
 " Init {{{
 
-if exists('g:tube_disable')
-    let s:disable = g:tube_disable
-else
-    let s:disable = 0
-endif
-
-if s:disable || exists("g:tube_loaded") || &cp
+let disable = get(g:, 'tube_disable', 0)
+if disable || exists("g:tube_loaded") || &cp
     finish
 endif
 
-if !has('python')
-    echohl WarningMsg | echom "Tube requires vim to be compiled with Python 2.6+" | echohl None
-    finish
-endif
-
-if v:version < 703
-    echohl WarningMsg | echom "Tube requires vim 7.3+" | echohl None
-    finish
-endif
-
-if exists('s:unsupported_python')
-    echohl WarningMsg | echom "Tube requires vim to be compiled with Python 2.6+" | echohl None
+if !has('python') || !has('gui_macvim')
+    echohl WarningMsg | echom "Tube requires MacVim to be compiled with Python 2.6+" | echohl None
     finish
 endif
 
