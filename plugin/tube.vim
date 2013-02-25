@@ -16,7 +16,6 @@ if disable || exists("g:tube_loaded") || &cp
 endif
 
 if !has('python') || !has('gui_macvim')
-    echohl WarningMsg | echom "Tube requires MacVim to be compiled with Python 2.6+" | echohl None
     finish
 endif
 
