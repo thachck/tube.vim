@@ -8,9 +8,8 @@ separate iTerm or Terminal window without leaving MacVim.
 
 ## Requirements
 
-* Mac OS X 10.6+ (note that this plugin has been tested only on Mac OS X 10.6
-  but should work even with successive versions)
-* iTerm2 or Terminal installed
+* Mac OS X 10.6+
+* iTerm2 or Terminal already installed
 * MacVim compiled with python 2.6+
 
 
