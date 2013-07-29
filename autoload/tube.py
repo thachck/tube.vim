@@ -71,7 +71,8 @@ class TubePlugin:
 
     def RunAlias(self, start, end, alias, clear=False):
         """Lookup a command given its alias and execute that command."""
-        command = self.alias_manager.get(alias)
+        aliases = self.settings.get('aliases')
+        command = aliases.get(alias)
         if command:
             self.RunCommand(start, end, command, clear)
         else:
@@ -119,6 +120,21 @@ class TubePlugin:
         os.popen("{0} '{1}'".format(self.BASE_CMD, cmd))
 
     ## INTERNALS
+    def ShowAliases(self):
+        """To show all defined aliases."""
+        aliases = self.settings.get('aliases')
+        if not aliases:
+            self.misc.echo('no aliases found')
+            return
+
+        n = len(aliases)
+        print('+ aliases')
+        for i, alias in enumerate(aliases):
+            if i == (n - 1):
+                conn = '└─ '
+            else:
+                conn = '├─ '
+            print(conn + alias + ': ' + aliases[alias])
 
     def run(self, cmd, clear=False):
         """Send the command to the terminal emulator of choice"""
