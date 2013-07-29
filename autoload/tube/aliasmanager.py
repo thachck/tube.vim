@@ -2,7 +2,7 @@
 
 import vim
 import tube.utils.settings
-import tube.utils.echo
+import tube.utils.misc
 
 
 class AliasManager:
@@ -27,6 +27,7 @@ class AliasManager:
         for s, val in sett.items():
             if vim.eval("!exists('g:tube_{0}')".format(s)) == '1':
                 self.settings.set(s, val)
+        self.misc = tube.utils.misc
 
     def get(self, alias):
         """To return an alias if exists."""
@@ -74,6 +75,7 @@ class AliasManager:
         """Show all defined aliases."""
         if not self.aliases:
             self.echo.echom('nothing found')
+            self.misc.echo('no aliases found')
             return
 
         n = len(self.aliases)

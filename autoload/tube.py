@@ -13,19 +13,14 @@ sys.path.insert(0, os.path.split(
 
 import tube.aliasmanager
 import tube.utils.settings
-import tube.utils.expansion
-import tube.utils.echo
+import tube.utils.misc
 
 
 class TubePlugin:
 
     def __init__(self):
-
-        # modules reference shortcuts
         self.settings = tube.utils.settings
-        self.expansion = tube.utils.expansion
-        self.echo = tube.utils.echo
-
+        self.misc = tube.utils.misc
         self.alias_manager = tube.aliasmanager.AliasManager()
         self.init_settings()
 
@@ -65,21 +60,21 @@ class TubePlugin:
         if parse:
 
             if cmd and self.settings.get('bufname_expansion', bool):
-                cmd = self.expansion.expand_chars(
+                cmd = self.misc.expand_chars(
                         cmd, '%', vim.current.buffer.name)
 
             if cmd and self.settings.get('selection_expansion', bool):
-                cmd = self.expansion.expand_chars(
+                cmd = self.misc.expand_chars(
                         cmd, '@', '\r'.join(vim.current.buffer[start-1:end]))
 
             if cmd and self.settings.get('function_expansion', bool):
                 try:
-                    cmd = self.expansion.expand_functions(cmd)
+                    cmd = self.misc.expand_functions(cmd)
                 except NameError:  # the function does not exist
-                    self.echo.echom('unknown function')
+                    self.misc.echo('unknown function')
                     return
                 except ValueError:  # bad arguments
-                    self.echo.echom('bad arguments')
+                    self.misc.echo('bad arguments')
                     return
 
         if (not cmd or clear
@@ -98,16 +93,15 @@ class TubePlugin:
         command = self.alias_manager.get(alias)
         if command:
             self.RunCommand(start, end, command, clear)
-            return
-
-        self.echo.echom('alias not found')
+        else:
+            self.misc.echo('alias not found')
 
     def RunLastCommand(self):
         """Execute the last executed command."""
         if self.last_command:
             self.RunCommand(1, 1, self.last_command, parse=False)
         else:
-            self.echo.echom('no last command to execute')
+            self.misc.echo('no last command to execute')
 
     def InterruptRunningCommand(self):
         """Interrupt the running command in the terminal window."""
@@ -177,4 +171,4 @@ class TubePlugin:
     def echo_setting_state(self, sett):
         """Show the current state of the given setting."""
         sett_state = '{0} = {1}'.format(sett, self.settings.get(sett))
-        self.echo.echom(sett_state)
+        self.misc.echo(sett_state)

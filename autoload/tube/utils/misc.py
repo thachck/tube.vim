@@ -6,6 +6,11 @@ import tube.utils.settings
 from itertools import groupby
 
 
+def echo(msg):
+    """Display a simple feedback to the user via the command line."""
+    vim.command('echom "[tube] {0}"'.format(msg))
+
+
 def expand_chars(raw_str, target, repl): # {{{
     """Expand the character (target) in a string (raw_str) with another
     string (repl) .
