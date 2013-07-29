@@ -105,8 +105,8 @@ let g:tube_terminal = 'terminal'   " if you use Terminal.app
    character @ as one of the arguments.           quotes. Also, you do not have to bother about
    Doing so we pass the selection right           escaping yourself the string since it's done
    into the function as a normal argument         automatically for you. 
-   (note the quotes). This might be useful        
-   if you need to perform some kind of            Note the awkward ^^ arguments separator. Since            
+   (note the quotes). This might be useful
+   if you need to perform some kind of            Note the awkward ^^ arguments separator. Since
    formatting on the selection before             you are not required to escape yourself the
    passing it to the function.                    arguments (since they might come from an arbitrary
                                                   selection and injected via the @ character) there
@@ -125,10 +125,10 @@ let g:tube_terminal = 'terminal'   " if you use Terminal.app
  MacVim               /                               MacVim (invisible state)
 ---------------------°---------------                ....................................
 |                                   |                .                                  .
-| // a very                         |                . // a very                       .
-| // long long                      |                . // long long                    .
-| // paragraph                      | -------------> . // paragraph                    .
-|                                   |                .                                 .
+| // a very                         |                . // a very                        .
+| // long long                      |                . // long long                     .
+| // paragraph                      | -------------> . // paragraph                     .
+|                                   |                .                                  .
 |___________________________________|                ....................................
 |:TubeAlias cmd                     |          _____ |:Tube do something                |
 ---------------|---------------------         |      ....................................
