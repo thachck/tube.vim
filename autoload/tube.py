@@ -1,4 +1,11 @@
 # -*- coding: utf-8 -*-
+"""
+tube.py
+~~~~~~~
+
+This module defines the Tube class. This class provides the
+main functionality for the Tube plugin,
+"""
 
 import os
 import vim
@@ -8,31 +15,25 @@ import sys
 import warnings
 warnings.simplefilter("ignore", DeprecationWarning)
 
-sys.path.insert(0, os.path.split(
-    vim.eval('fnameescape(globpath(&runtimepath, "autoload/tube.py"))'))[0])
+sys.path.insert(0, os.path.dirname(
+    vim.eval('globpath(&rtp, "autoload/tube.py")')))
 
 import tube.aliasmanager
 import tube.utils.settings
 import tube.utils.misc
 
 
-class TubePlugin:
+class Tube:
 
     def __init__(self):
         self.settings = tube.utils.settings
         self.misc = tube.utils.misc
         self.alias_manager = tube.aliasmanager.AliasManager()
-
-        self.AUTOLOAD_PATH = os.path.split(
-            vim.eval('fnameescape(globpath(&runtimepath, "autoload/tube.py"))'))[0]
-
-        # base strings for applescript commands
-        self.BASE_CMD_SCRIPTS = "osascript " + self.AUTOLOAD_PATH + "/applescript/"
-        self.BASE_CMD = 'osascript -e'
-
         self.last_command = ''
 
-    ## INTERFACE METHODS
+        path = os.path.dirname(vim.eval('globpath(&rtp, "autoload/tube.py")'))
+        self.SCRIPTS_LOC = "osascript " + path + "/applescript/"
+        self.BASE_CMD = 'osascript -e'
 
     def RunCommand(self, start, end, cmd, clear=False, parse=True):
         """Inject the proper data in the command if required and run the
@@ -97,11 +98,7 @@ class TubePlugin:
 
             tell application "MacVim" to activate"""
 
-        if term == 'terminal':
-            cmd = cmd.format("Terminal")
-        else:
-            cmd = cmd.format("iTerm")
-
+        cmd = cmd.format("Terminal" if term == "terminal" else "iTerm")
         os.popen("{0} '{1}'".format(self.BASE_CMD, cmd))
 
     def CdIntoVimCwd(self):
@@ -119,7 +116,6 @@ class TubePlugin:
 
         os.popen("{0} '{1}'".format(self.BASE_CMD, cmd))
 
-    ## INTERNALS
     def ShowAliases(self):
         """To show all defined aliases."""
         aliases = self.settings.get('aliases')
@@ -140,9 +136,9 @@ class TubePlugin:
         """Send the command to the terminal emulator of choice"""
         term = self.settings.get('terminal').lower()
         if term == 'iterm':
-            base = self.BASE_CMD_SCRIPTS + 'iterm.scpt'
+            base = self.SCRIPTS_LOC + 'iterm.scpt'
         else:
-            base = self.BASE_CMD_SCRIPTS + 'terminal.scpt'
+            base = self.SCRIPTS_LOC + 'terminal.scpt'
 
         clr = 'clear;' if clear else ''
         cmd = cmd.replace('\\', '\\\\')
