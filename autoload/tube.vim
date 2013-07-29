@@ -1,18 +1,18 @@
 " ============================================================================
 " File: autoload/tube.vim
 " Description: MacVim and terminal interaction made easy
-" Mantainer: Giacomo Comitti (https://github.com/gcmt)
+" Mantainer: Giacomo Comitti - https://github.com/gcmt
 " Url: https://github.com/gcmt/tube.vim
 " License: MIT
-" Version: 0.3.1
-" Last Changed: 2 Feb 2013
+" Version: 0.4.0
+" Last Changed: 29 Jul 2013
 " ============================================================================
 
-function! tube#Init()
-    let py_module = fnameescape(globpath(&runtimepath, 'autoload/tube.py'))
+fu! tube#Init()
+    let py_module = fnameescape(globpath(&rtp, 'autoload/tube.py'))
     exe 'pyfile ' . py_module
-    py tube_plugin = TubePlugin()
-endfunction
+    py tube_plugin = Tube()
+endfu
 
 call tube#Init()
 
@@ -50,43 +50,15 @@ function! tube#AliasClear(start, end, args)
     py tube_plugin.RunAlias(int(vim.eval('a:start')), int(vim.eval('a:end')), vim.eval('a:args'), clear=True)
 endfunction
 
-function! tube#RemoveAlias(alias)
-    py tube_plugin.alias_manager.RemoveAlias(vim.eval('a:alias'))
-endfunction
-
-function! tube#AddAlias(args)
-    py tube_plugin.alias_manager.AddAlias(vim.eval('a:args'))
-endfunction
-
-function! tube#ReloadAliases()
-    py tube_plugin.alias_manager.ReloadAliases()
-endfunction
-
 function! tube#ShowAliases()
-    py tube_plugin.alias_manager.ShowAliases()
-endfunction
-
-function! tube#RemoveAllAliases()
-    py tube_plugin.alias_manager.RemoveAllAliases()
+    py tube_plugin.ShowAliases()
 endfunction
 
 
 function! tube#ToggleClearScreen()
-    py tube_plugin.ToggleSetting('always_clear_screen')
+    py tube_plugin.toggle_setting('always_clear_screen')
 endfunction
 
 function! tube#ToggleRunBackground()
-    py tube_plugin.ToggleSetting('run_command_background')
-endfunction
-
-function! tube#ToggleBufnameExp()
-    py tube_plugin.ToggleSetting('bufname_expansion')
-endfunction
-
-function! tube#ToggleFunctionExp()
-    py tube_plugin.ToggleSetting('function_expansion')
-endfunction
-
-function! tube#ToggleSelectionExp()
-    py tube_plugin.ToggleSetting('selection_expansion')
+    py tube_plugin.toggle_setting('run_command_background')
 endfunction
