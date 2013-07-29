@@ -124,21 +124,21 @@ let g:tube_terminal = 'terminal'   " if you use Terminal.app
                        focus remains here
  MacVim               /                               MacVim (invisible state)
 ---------------------°---------------                ....................................
-| // a very                         |                . // a very                        .
-| // long long                      |                . // long long                     .
-| // paragraph                      |                . // paragraph                     .
-| // is selected                    | -------------> . // is selected                   .
-| ...                               |                . ...                              .
+|                                   |                .                                  .
+| // a very                         |                . // a very                       .
+| // long long                      |                . // long long                    .
+| // paragraph                      | -------------> . // paragraph                    .
+|                                   |                .                                 .
 |___________________________________|                ....................................
-|:'<,'>TubeAlias cmd                |          _____ |:Tube make etc                    |
+|:TubeAlias cmd                     |          _____ |:Tube do something                |
 ---------------|--°------------------         |      ....................................
                |   \_____________________     |
  Your .vimrc   |                         |    |       Terminal
 ---------------|---------------------    |    |      ------------------------------------
-|                                   |    |    `----> | $ make etc                        |
+|                                   |    |    `----> | $ do something                    |
 | let g:tube_aliases = {            |    |           | ...                               |
-|  \'cmd':'#{Format("@")} | do sth' |    |           |                                   |
-|  \}                               |    |           |                                   |
+|  \ 'cmd':'do something'           |    |           |                                   |
+|  \ }                              |    |           |                                   |
 |                                   |    |           |                                   |
 --------°-----------°----------------    |           -------------------------------------
         |            \____________________\
