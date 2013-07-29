@@ -2,8 +2,8 @@
 *tube*
 
                                    Tube
-                    MacVim and iterm or Terminal interaction
-                                  v0.3.1
+                MacVim and iTerm or Terminal interaction made easy
+                                  v0.4.0
 
                                      ~
                               Reference Manual
@@ -46,11 +46,11 @@ terminal window mantaining the focus on the MacVim window.
 ==============================================================================
 3. Installation                                            *tube-installation*
 
-Extract the content of the folder into the `.vim` folder or use your favourite 
-package manager Pathogen or Vundle.
+Extract the plugin folder to `~/.vim` or use a plugin manager such as
+Vundle, Pathogen or Neobundle.
 
-To complete the installation you need to set the following variable in 
-your .vimrc file:
+To complete the installation you need to set the following variable in
+your `.vimrc` file:  
 
     let g:tube_terminal = 'iterm'      " if you use iTerm.app 
 
@@ -184,9 +184,6 @@ Aliasing
 
 Tube                                                                    *Tube*
 ------------------------------------------------------------------------------
-> arguments: a string of any length (the command)
-> accepts selection: yes
-> e.g. Tube python % (see below for the special % character)
 
 Execute the command in the separate iTerm (or Terminal) window. If the that
 window does not exist yet, then it is created. If no command is given the
@@ -213,26 +210,22 @@ NOTE: if you need a plain `%` or `@` character in your command just append
       the same character twice, respectively `%%` and `@@`
 
 
-TubeClear                                                          *TubeClear*
+TubeClr                                                              *TubeClr*
 ------------------------------------------------------------------------------
-> arguments: a string of any length(the command)
-> accepts selection: yes
     
 As the `Tube` command but force the terminal to clear its screen before
 executing the command. Under the hood it appends a `clear` command before
 the main command.         
 
 
-TubeLastCommand                                              *TubeLastCommand*
+TubeLastCmd                                                      *TubeLastCmd*
 ------------------------------------------------------------------------------
-> arguments: no
 
 Execute the last executed command.
 
 
-TubeInterruptCommand                                    *TubeInterruptCommand* 
+TubeInterrupt                                                  *TubeInterrupt* 
 ------------------------------------------------------------------------------
-> arguments: no
 
 Interrupt the current running command in the terminal window. Under the hood
 this sends the Ctrl-C command.
@@ -240,110 +233,47 @@ this sends the Ctrl-C command.
 
 TubeCd                                                                *TubeCd* 
 ------------------------------------------------------------------------------
-> arguments: no
 
 Execute a `cd 'vim current working directory'` command in the terminal window.
 
 
 TubeClose                                                          *TubeClose* 
 ------------------------------------------------------------------------------
-> arguments: no
 
 Close the terminal window.
 
 
 TubeAlias                                                          *TubeAlias*
 ------------------------------------------------------------------------------
-> arguments: a string of any length (the alias name)
-> accepts selection: yes
 
 Execute the command associated with the given alias name. The alias might be
 defined in the `.vimrc` file via the `g:tube_aliases` setting or at run time
 via the `TubeAddAlias` command.             
 
 
-TubeAliasClear                                                *TubeAliasClear*
+TubeAliasClr                                                    *TubeAliasClr*
 ------------------------------------------------------------------------------
-> arguments: a string of any length (the alias name)
-> accepts selection: yes
 
 As the `TubeAlias` command but force the terminal to clear its screen before
 executing the command associated with the alias. 
 
 
-TubeRemoveAlias                                              *TubeRemoveAlias* 
-------------------------------------------------------------------------------
-> arguments: a string of any length (the alias name)
-> e.g. TubeRemoveAlias myalias
-
-Remove the command associated with the given alias.
-
-
-TubeAddAlias                                                    *TubeAddAlias* 
-------------------------------------------------------------------------------
-> arguments: at least two tokens of any length
-> e.g. TubeAddAlias myalias cd into/that & rm all
-
-Associate the alias with the given command.
-
-
 TubeAliases                                                      *TubeAliases* 
 ------------------------------------------------------------------------------
-> arguments: no
 
 Show all defined aliases.
 
 
-TubeRemoveAllAliases                                    *TubeRemoveAllAliases* 
-------------------------------------------------------------------------------
-> arguments: no
-
-Remove all defined aliases. This affect only the current vim session for
-aliases defined at runtime.
-
-
-TubeReloadAliases                                          *TubeReloadAliases* 
-------------------------------------------------------------------------------
-> arguments: no
-
-Reload the g:tube_aliases vim variable. This might be needed when the user
-change that variable at runtime.
-
-
-
 TubeToggleClearScreen                                  *TubeToggleClearScreen* 
 ------------------------------------------------------------------------------
-> arguments: no
 
 Toggle the g:tube_always_clear_screen setting.
 
 
 TubeToggleRunBackground                              *TubeToggleRunBackground* 
 ------------------------------------------------------------------------------
-> arguments: no
 
 Toggle the g:tube_run_command_background setting.
-
-
-TubeToggleBufnameExp                              *TubeToggleBufnameExp* 
-------------------------------------------------------------------------------
-> arguments: no
-
-Toggle the g:tube_bufname_expansion setting.
-
-
-TubeToggleFunctionExp                            *TubeToggleFunctionExp* 
-------------------------------------------------------------------------------
-> arguments: no
-
-Toggle the g:tube_function_expansion setting.
-
-
-TubeToggleSelectionExp                            *TubeToggleSelectionExp* 
-------------------------------------------------------------------------------
-> arguments: no
-
-Toggle the g:tube_selection_expansion setting.
 
 
 ==============================================================================
@@ -351,17 +281,15 @@ Toggle the g:tube_selection_expansion setting.
 
 g:tube_terminal                                              *g:tube_terminal* 
 ------------------------------------------------------------------------------
-> values: 'iterm' or 'terminal'
 
 Use this setting to set the terminal emulator of your choice. At the moment
 only iTerm and Terminal are supported.
 
-default: 'terminal'
+default: 'terminal' (values: 'iterm' or 'terminal')
 
 
 g:tube_always_clear_screen                        *g:tube_always_clear_screen* 
 ------------------------------------------------------------------------------
-> values: 1 or 0
 
 Setting this to 0 forces the terminal to clear its screen whenever
 a command is executed. You can toggle this setting on or off with the
@@ -372,7 +300,6 @@ default: 0
 
 g:tube_run_command_background                  *g:tube_run_command_background* 
 ------------------------------------------------------------------------------
-> values: 1 or 0
 
 Set this variable to 1 to mantain the focus on the MacVim window whenever a
 command is executed. You can toggle this setting on or off with the
@@ -383,7 +310,6 @@ default: 1
 
 g:tube_aliases                                                *g:tube_aliases* 
 ------------------------------------------------------------------------------
-> values: a dictionary {'alias': 'command', ...}
 
 With this dictionary you can set your own aliases for commands. Just use the
 alias name as the dictionary key and the string command as the value. Be sure
@@ -391,10 +317,13 @@ to have unique aliases. Special characters (`%`, `@` and `#{..}`) are supported.
 
 default: {}
 
+Example:
+
+         let g:tube_aliases = {'alias': 'cd project_root; ./run_tests'}
+
 
 g:tube_bufname_expansion                            *g:tube_bufname_expansion* 
 ------------------------------------------------------------------------------
-> values: 0 or 1
 
 Set this variable to 1 and every `%` character in your commands will be
 replaced with the current buffer name (its absolute path). If you need the just
@@ -406,7 +335,6 @@ default: 1
 
 g:tube_function_expansion                          *g:tube_function_expansion* 
 ------------------------------------------------------------------------------
-> values: 0 or 1
 
 Set this variable to 1 to enable function expansion. Every 
 `#{FunctionName(arg1, .., argn)}` string inside commands will be replaced with 
@@ -416,7 +344,6 @@ default: 1
 
 g:tube_selection_expansion                        *g:tube_selection_expansion* 
 ------------------------------------------------------------------------------
-> values: 0 or 1
 
 Set this variable to 1 to enable selection expansion. Every `@` character
 inside commands will be replaced with the current selection. In order to get
@@ -429,29 +356,22 @@ default: 1
 
 g:tube_enable_shortcuts                              *g:tube_enable_shortcuts* 
 ------------------------------------------------------------------------------
-> values: 0 or 1
 
 Set this variable to 1 to to enable shortcuts for the most important commands:
 
 * `T`: Tube
-* `Tc`: TubeClear
-* `Tl`: TubeLastCommand
-* `Ti`: TubeInterruptCommand
+* `Tc`: TubeClr
+* `Tl`: TubeLastCmd
+* `Ti`: TubeInterrupt
 * `Tcd`: TubeCd
 * `Ta`: TubeAlias
-* `Tac`: TubeAliasClear
-* `Tar`: TubeRemoveAlias
-* `Tad`: TubeAddAlias
-* `Tall`: TubeAliases
+* `Tac`: TubeAliasClr
 
 default: 0   
 
 
 g:tube_funargs_separator                            *g:tube_funargs_separator* 
 ------------------------------------------------------------------------------
-> values: any string
-> default: ^^
-```
 
 This variable let you define your own preferred characters sequence to 
 separate arguments of injected function. The default string has been selected
@@ -462,41 +382,48 @@ you don't use your separator sequence in arguments.
 ==============================================================================
 7. Changelog                                                  *tube-changelog*
 
-v0.3.1
+0.4.0
 
-  - fixed commas-related problems when passing arguments to injected function.
-    Now to separate arguments is required the special sequence '^^'.
-  - added g:tube_funargs_separator setting to let the user define its own
-    preferred characters sequence to separate arguments of injected function.
-  - fixed escaping for the '$' character. 
+	- Commands removed: `ToggleBufnameExp`, `ToggleFunctionExp`, `ToggleSelectionExp`, 
+	  `RemoveAlias`, `AddAlias`, `RemoveAllAliases`, `ReloadAliases`. 
+	- Commands renamed: `TubeClear` to `TubeClr`, `TubeAliasClear` to `TubeAliasClr`, 
+	  `TubeLastCommand` to `TubeLastCmd`, `TubeInterruptCommand` to `TubeInterrupt`.
 
-v0.3.0 
+0.3.1
 
-  - new feature: selection injection into the command with the @ character.
-  - new feature: injected functions accept arguments.
-  - g:tube_at_character_expansion setting renamed to g:tube_bufname_expansion.
-  - TubeToggleExpandPercent command renamed to TubeToggleBufnameExp.
-  -  TubeToggleExpandFunction command renamed to TubeToggleFunctionExp.
-  - added shortcuts for most important commands (disabled by default).
-  - added g:tube_enable_shortcuts setting.
-  - added g:tube_selection_expansion setting.
-  - added TubeToggleSelectionExp command.
-  - fixed backslash escaping in commands.
-  - minor bug fixes.
+	- Fixed commas-related problems when passing arguments to injected function. 
+	  Now to separate arguments is required the special sequence '^^'.
+	- Added `g:tube_funargs_separator` setting to let the user define its own preferred
+	  characters sequence to separate arguments of injected function.
+	- Fixed escaping for the '$' character.
 
-v0.2.1 
+0.3.0
 
-  - fix plugin feedback
+	- New feature: selection injection into the command with the @ character.
+	- New feature: injected functions accept arguments.
+	- `g:tube_at_character_expansion` setting renamed to `g:tube_bufname_expansion`.
+	- TubeToggleExpandPercent command renamed to TubeToggleBufnameExp.
+	- TubeToggleExpandFunction command renamed to TubeToggleFunctionExp.
+	- Added shortcuts for most important commands (disabled by default).
+	- Added `g:tube_enable_shortcuts` setting.
+	- Added `g:tube_selection_expansion` setting.
+	- Added TubeToggleSelectionExp command.
+	- Fixed backslash escaping in commands.
+	- Minor bug fixes.
 
-v0.2.0
-  
-  - new functionality: the result of a custom vim function can be injected
-    into the command with the special notation #{CustomFunction}.
-  - minor bug fixes.
-    
-v0.1.0: 
+0.2.1
 
-  - first release
+	- Fix plugin feedback
+
+0.2.0
+
+	- New feature: the result of a custom vim function can be injected into the command
+	  with the special notation #{CustomFunction}.
+	- Minor bug fixes.
+
+0.1.0
+
+	- First release
 
 
 ==============================================================================
