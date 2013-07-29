@@ -1,0 +1,45 @@
+
+# Changelog
+
+0.4.0
+
+	- Commands removed: `ToggleBufnameExp`, `ToggleFunctionExp`, `ToggleSelectionExp`, 
+	  `RemoveAlias`, `AddAlias`, `RemoveAllAliases`, `ReloadAliases`. 
+	- Commands renamed: `TubeClear` to `TubeClr`, `TubeAliasClear` to `TubeAliasClr`, 
+	  `TubeLastCommand` to `TubeLastCmd`, `TubeInterruptCommand` to `TubeInterrupt`.
+
+0.3.1
+
+	- Fixed commas-related problems when passing arguments to injected function. 
+	  Now to separate arguments is required the special sequence '^^'.
+	- Added `g:tube_funargs_separator` setting to let the user define its own preferred
+	  characters sequence to separate arguments of injected function.
+	- Fixed escaping for the '$' character.
+
+0.3.0
+
+	- New feature: selection injection into the command with the @ character.
+	- New feature: injected functions accept arguments.
+	- `g:tube_at_character_expansion` setting renamed to `g:tube_bufname_expansion`.
+	- TubeToggleExpandPercent command renamed to TubeToggleBufnameExp.
+	- TubeToggleExpandFunction command renamed to TubeToggleFunctionExp.
+	- Added shortcuts for most important commands (disabled by default).
+	- Added `g:tube_enable_shortcuts` setting.
+	- Added `g:tube_selection_expansion` setting.
+	- Added TubeToggleSelectionExp command.
+	- Fixed backslash escaping in commands.
+	- Minor bug fixes.
+
+0.2.1
+
+	- Fix plugin feedback
+
+0.2.0
+
+	- New feature: the result of a custom vim function can be injected into the command
+	  with the special notation #{CustomFunction}.
+	- Minor bug fixes.
+
+0.1.0
+
+	- First release
