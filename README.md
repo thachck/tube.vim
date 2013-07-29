@@ -99,8 +99,8 @@ let g:tube_terminal = 'terminal'   " if you use Terminal.app
 |                                   |    |           |                                  |
 -------------------------------------    |           ------------------------------------
                                          |
-              __________________________/ \__________________________
-             /                                                       \
+                    +--------------------+--------------------------+
+                    |                                               |
    In this example we used the special            As you can see only string arguments require
    character @ as one of the arguments.           quotes. Also, you do not have to bother about
    Doing so we pass the selection right           escaping yourself the string since it's done
@@ -131,24 +131,21 @@ let g:tube_terminal = 'terminal'   " if you use Terminal.app
 |                                   |                .                                 .
 |___________________________________|                ....................................
 |:TubeAlias cmd                     |          _____ |:Tube do something                |
----------------|--°------------------         |      ....................................
-               |   \_____________________     |
- Your .vimrc   |                         |    |       Terminal
----------------|---------------------    |    |      ------------------------------------
-|                                   |    |    `----> | $ do something                    |
-| let g:tube_aliases = {            |    |           | ...                               |
-|  \ 'cmd':'do something'           |    |           |                                   |
-|  \ }                              |    |           |                                   |
-|                                   |    |           |                                   |
---------°-----------°----------------    |           -------------------------------------
-        |            \____________________\
-        |                                   Selection, function and buffer injection
-      You can define aliases in your        still work with aliasing.                
-      .vimrc file or at runtime. Keep        
-      in mind that in the latter case
-      you'll lose those aliases once 
-      you quit MacVim.
-```
+---------------|---------------------         |      ....................................
+               |                              |
+ Your .vimrc   |                              |       Terminal
+---------------|---------------------         |      ------------------------------------
+|                                   |         `----> | $ do something                    |
+| let g:tube_aliases = {            |                | ...                               |
+|  \ 'cmd':'do something'           |                |                                   |
+|  \ }                              |                |                                   |
+|                                   |                |                                   |
+--------°----------------------------                -------------------------------------
+        |                                  
+        |                                   
+      You can define aliases in your .vimrc file. 
+      Selection, function and buffer injection still work with aliasing.               
+``` 
 
 
 ## Commands
