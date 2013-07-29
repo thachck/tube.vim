@@ -18,7 +18,6 @@ warnings.simplefilter("ignore", DeprecationWarning)
 sys.path.insert(0, os.path.dirname(
     vim.eval('globpath(&rtp, "autoload/tube.py")')))
 
-import tube.aliasmanager
 import tube.utils.settings
 import tube.utils.misc
 
