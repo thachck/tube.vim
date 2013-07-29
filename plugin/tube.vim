@@ -21,6 +21,16 @@ endif
 
 let g:tube_loaded = 1
 
+" Initialize settings {{{
+let g:tube_terminal =  get(g:, "tube_terminal", 'terminal')
+let g:tube_always_clear_screen = get(g:, "tube_always_clear_screen", 0)
+let g:tube_run_command_background = get(g:, "tube_run_command_background", 1)
+let g:tube_bufname_expansion = get(g:, "tube_bufname_expansion", 1)
+let g:tube_selection_expansion = get(g:, "tube_selection_expansion", 1)
+let g:tube_function_expansion = get(g:, "tube_function_expansion", 1)
+let g:tube_enable_shortcuts = get(g:, "tube_enable_shortcuts", 0)
+let g:tube_funargs_separator = get(g:, "tube_funargs_separator", '^^')
+let g:tube_aliases = get(g:, "tube_aliases",  {})
 " }}}
 
 " Commands {{{

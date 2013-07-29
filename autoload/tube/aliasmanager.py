@@ -8,25 +8,7 @@ import tube.utils.misc
 class AliasManager:
 
     def __init__(self):
-
-        # modules reference shortcuts
         self.settings = tube.utils.settings
-        self.echo = tube.utils.echo
-
-        self.init_settings()
-
-        self.aliases = self.settings.get('aliases')
-
-    ## INTERNALS
-
-    def init_settings(self):
-        sett = {
-            'aliases': {}
-        }
-
-        for s, val in sett.items():
-            if vim.eval("!exists('g:tube_{0}')".format(s)) == '1':
-                self.settings.set(s, val)
         self.misc = tube.utils.misc
 
     def get(self, alias):

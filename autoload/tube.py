@@ -22,7 +22,6 @@ class TubePlugin:
         self.settings = tube.utils.settings
         self.misc = tube.utils.misc
         self.alias_manager = tube.aliasmanager.AliasManager()
-        self.init_settings()
 
         self.AUTOLOAD_PATH = os.path.split(
             vim.eval('fnameescape(globpath(&runtimepath, "autoload/tube.py"))'))[0]
@@ -32,24 +31,6 @@ class TubePlugin:
         self.BASE_CMD = 'osascript -e'
 
         self.last_command = ''
-
-    def init_settings(self):
-        sett = {
-            'terminal': 'terminal',
-            'always_clear_screen': 0,
-            'run_command_background': 1,
-            'bufname_expansion': 1,
-            'selection_expansion': 1,
-            'function_expansion': 1,
-            'enable_shortcuts': 0,
-            'funargs_separator': '^^'
-        }
-
-        for s, val in sett.items():
-            if vim.eval("!exists('g:tube_{0}')".format(s)) == '1':
-                self.settings.set(s, val)
-
-        self.alias_manager.init_settings()
 
     ## INTERFACE METHODS
 
