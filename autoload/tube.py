@@ -27,11 +27,10 @@ class Tube:
     def __init__(self):
         self.settings = tube.utils.settings
         self.misc = tube.utils.misc
-        self.alias_manager = tube.aliasmanager.AliasManager()
         self.last_command = ''
 
-        path = os.path.dirname(vim.eval('globpath(&rtp, "autoload/tube.py")'))
-        self.SCRIPTS_LOC = "osascript " + path + "/applescript/"
+        p = os.path.dirname(vim.eval('globpath(&rtp, "autoload/tube.py")'))
+        self.SCRIPTS_LOC = "osascript " + p + "/applescript/"
         self.BASE_CMD = 'osascript -e'
 
     def RunCommand(self, start, end, cmd, clear=False, parse=True):
