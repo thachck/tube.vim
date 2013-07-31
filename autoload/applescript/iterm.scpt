@@ -6,7 +6,7 @@
 on run argv
 
     set command to (item 1 of argv)
-    
+
     tell application "iTerm"
 
         try
@@ -14,7 +14,7 @@ on run argv
         on error
             set myterm to (make new terminal)
             tell myterm
-                launch session "Default"
+                launch session "rspec"
                 set mysession to current session
             end tell
         end try
