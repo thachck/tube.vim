@@ -6,24 +6,13 @@
 on run argv
 
     set command to (item 1 of argv)
-
     tell application "iTerm"
-
-        try
-            set mysession to current session of current terminal
-        on error
-            set myterm to (make new terminal)
-            tell myterm
-                launch session "rspec"
-                set mysession to current session
-            end tell
-        end try
-
-        -- execute the command
-        tell mysession
+      repeat with _terminal in terminals
+        repeat with _session in (every session of _terminal whose name contains "rspec")
+          tell the _session
             write text command
-        end tell
-
+          end tell
+        end repeat
+      end repeat
     end tell
-
 end run
